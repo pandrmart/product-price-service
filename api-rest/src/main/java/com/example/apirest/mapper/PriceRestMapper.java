@@ -1,6 +1,6 @@
 package com.example.apirest.mapper;
 
-import com.example.apirest.dto.PriceResponseDTO;
+import com.example.api.dto.PriceResponse;
 import com.example.domain.entity.Price;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,5 +10,5 @@ public interface PriceRestMapper {
 
     @Mapping(source = "money.amount", target = "price")
     @Mapping(source = "money.currency", target = "currency")
-    PriceResponseDTO toDto(Price price);
+    PriceResponse toDto(Price price);
 }

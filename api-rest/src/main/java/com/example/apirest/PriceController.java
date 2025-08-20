@@ -1,19 +1,15 @@
 package com.example.apirest;
 
-import com.example.apirest.dto.PriceRequestDTO;
-import com.example.apirest.dto.PriceResponseDTO;
+import com.example.api.controller.DefaultApi;
+import com.example.api.dto.PriceRequest;
+import com.example.api.dto.PriceResponse;
 import com.example.apirest.mapper.PriceRestMapper;
 import com.example.domain.port.in.GetPriceUseCase;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/prices")
-public class PriceController {
+public class PriceController implements DefaultApi {
 
     private final GetPriceUseCase getPriceUseCase;
     private final PriceRestMapper mapper;
@@ -23,9 +19,8 @@ public class PriceController {
         this.mapper = priceRestMapper;
     }
 
-    @PostMapping
-    public ResponseEntity<PriceResponseDTO> getPrice(@Valid @RequestBody PriceRequestDTO request) {
-
-        return getPriceUseCase.getPrice(request.productId(), request.brandId(), request.applicationDate()).map(mapper::toDto).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    @Override
+    public ResponseEntity<PriceResponse> searchPrices(PriceRequest request) {
+        return getPriceUseCase.getPrice(request.getProductId(), request.getBrandId(), request.getApplicationDate()).map(mapper::toDto).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }
