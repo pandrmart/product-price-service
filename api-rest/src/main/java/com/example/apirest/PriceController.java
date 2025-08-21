@@ -1,6 +1,6 @@
 package com.example.apirest;
 
-import com.example.api.controller.DefaultApi;
+import com.example.api.controller.PriceApi;
 import com.example.api.dto.PriceRequest;
 import com.example.api.dto.PriceResponse;
 import com.example.apirest.mapper.PriceRestMapper;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class PriceController implements DefaultApi {
+public class PriceController implements PriceApi {
 
     private final GetPriceUseCase getPriceUseCase;
     private final PriceRestMapper mapper;

@@ -7,6 +7,8 @@ paths:
   /prices/search:
     post:
       summary: Search applicable price
+      tags:
+        - Price
       description: Returns the applicable price for a product, brand and application date.
       operationId: searchPrices
       requestBody:
