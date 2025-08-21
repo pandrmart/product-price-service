@@ -1,7 +1,7 @@
 Feature: Test Price API Functionality
 
 Background:
-    * url 'http://localhost:8081'
+    * url karate.properties['karate.base.url']
 
 Scenario: Get a specific price for a product - Happy Path
   Given path '/prices/search'
