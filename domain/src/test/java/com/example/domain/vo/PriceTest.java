@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MoneyTest {
+public class PriceTest {
 
     @Test
     void moneyRecord_shouldBeCreatedCorrectly_withValidArguments() {
@@ -16,11 +16,11 @@ public class MoneyTest {
         BigDecimal validAmount = new BigDecimal("10.50");
         String validCurrency = "EUR";
 
-        Money money = new Money(validAmount, validCurrency);
+        Price price = new Price(validAmount, validCurrency);
 
-        assertNotNull(money);
-        assertEquals(validAmount, money.amount());
-        assertEquals(validCurrency, money.currency());
+        assertNotNull(price);
+        assertEquals(validAmount, price.amount());
+        assertEquals(validCurrency, price.currency());
     }
 
     @Test
@@ -28,7 +28,7 @@ public class MoneyTest {
 
         BigDecimal invalidAmount = null;
 
-        assertThrows(NullPointerException.class, () -> new Money(invalidAmount, "EUR"));
+        assertThrows(NullPointerException.class, () -> new Price(invalidAmount, "EUR"));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class MoneyTest {
 
         String invalidCurrency = null;
 
-        assertThrows(NullPointerException.class, () -> new Money(new BigDecimal("10.00"), invalidCurrency));
+        assertThrows(NullPointerException.class, () -> new Price(new BigDecimal("10.00"), invalidCurrency));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class MoneyTest {
 
         BigDecimal negativeAmount = new BigDecimal("-5.00");
 
-        assertThrows(IllegalArgumentException.class, () -> new Money(negativeAmount, "USD"));
+        assertThrows(IllegalArgumentException.class, () -> new Price(negativeAmount, "USD"));
     }
 
     @Test
@@ -52,6 +52,6 @@ public class MoneyTest {
 
         String invalidCurrency = "EU";
 
-        assertThrows(IllegalArgumentException.class, () -> new Money(new BigDecimal("10.00"), invalidCurrency));
+        assertThrows(IllegalArgumentException.class, () -> new Price(new BigDecimal("10.00"), invalidCurrency));
     }
 }

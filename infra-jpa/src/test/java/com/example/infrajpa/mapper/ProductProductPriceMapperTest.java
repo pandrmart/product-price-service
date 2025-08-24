@@ -1,7 +1,7 @@
 package com.example.infrajpa.mapper;
 
-import com.example.domain.entity.Price;
-import com.example.infrajpa.entity.PriceEntity;
+import com.example.domain.entity.ProductPrice;
+import com.example.infrajpa.entity.ProductPriceEntity;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -12,14 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PriceMapperTest {
+public class ProductProductPriceMapperTest {
 
-    private final PriceMapper mapper = Mappers.getMapper(PriceMapper.class);
+    private final ProductPriceMapper mapper = Mappers.getMapper(ProductPriceMapper.class);
 
     @Test
     void toDomain_shouldMapAllFieldsCorrectly_withValidData() {
 
-        PriceEntity entity = new PriceEntity();
+        ProductPriceEntity entity = new ProductPriceEntity();
         entity.setId(1L);
         entity.setProductId(100L);
         entity.setBrandId(2L);
@@ -30,7 +30,7 @@ public class PriceMapperTest {
         entity.setPrice(new BigDecimal("9.99"));
         entity.setCurrency("EUR");
 
-        Price domainRecord = mapper.toDomain(entity);
+        ProductPrice domainRecord = mapper.toDomain(entity);
 
         assertNotNull(domainRecord);
         assertEquals(entity.getId(), domainRecord.id());
@@ -41,16 +41,16 @@ public class PriceMapperTest {
         assertEquals(entity.getEndDate(), domainRecord.endDate());
         assertEquals(entity.getPriority(), domainRecord.priority());
 
-        assertNotNull(domainRecord.money());
-        assertEquals(entity.getPrice(), domainRecord.money().amount());
-        assertEquals(entity.getCurrency(), domainRecord.money().currency());
+        assertNotNull(domainRecord.price());
+        assertEquals(entity.getPrice(), domainRecord.price().amount());
+        assertEquals(entity.getCurrency(), domainRecord.price().currency());
     }
 
     @Test
     void toDomain_shouldThrowException_whenMoneyFieldsAreInvalid() {
 
-        PriceEntity entity = new PriceEntity();
-        entity.setPrice(null); // Campo nulo, el constructor de Money fallará
+        ProductPriceEntity entity = new ProductPriceEntity();
+        entity.setPrice(null);
 
         assertThrows(NullPointerException.class, () -> mapper.toDomain(entity));
     }

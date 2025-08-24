@@ -3,9 +3,9 @@ package com.example.domain.vo;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public record Money(BigDecimal amount, String currency) {
+public record Price(BigDecimal amount, String currency) {
 
-    public Money {
+    public Price {
         Objects.requireNonNull(amount, "Amount should not be null");
         Objects.requireNonNull(currency, "Currency should not be null");
         if (amount.compareTo(BigDecimal.ZERO) < 0) {

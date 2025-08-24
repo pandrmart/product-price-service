@@ -1,6 +1,6 @@
 package com.example.boot;
 
-import com.example.apirest.PriceController;
+import com.example.apirest.ProductPriceController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class BootApplicationTest {
 
     @Autowired
-    private PriceController priceController;
+    private ProductPriceController productPriceController;
 
     @Test
     void contextLoads() {
@@ -19,6 +19,6 @@ class BootApplicationTest {
 
     @Test
     void priceControllerShouldBeLoaded() {
-        assertNotNull(priceController);
+        assertNotNull(productPriceController);
     }
 }

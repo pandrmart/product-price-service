@@ -1,8 +1,8 @@
 package com.example.boot.configuration;
 
-import com.example.application.adapter.in.GetPriceService;
-import com.example.domain.port.in.GetPriceUseCase;
-import com.example.domain.port.out.GetPricePort;
+import com.example.application.adapter.in.GetProductPriceService;
+import com.example.domain.port.in.GetProductPriceUseCase;
+import com.example.domain.port.out.GetProductPricePort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfiguration {
 
     @Bean
-    public GetPriceUseCase getPriceUseCase(final GetPricePort getPricePort) {
-        return new GetPriceService(getPricePort);
+    public GetProductPriceUseCase getProductPriceUseCase(final GetProductPricePort getProductPricePort) {
+        return new GetProductPriceService(getProductPricePort);
     }
 }

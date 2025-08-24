@@ -4,48 +4,45 @@ info:
   version: 1.0.0
 
 paths:
-  /prices/search:
-    post:
+  /product-price/search:
+    get:
       summary: Search applicable price
       tags:
-        - Price
+        - ProductPrice
       description: Returns the applicable price for a product, brand and application date.
-      operationId: searchPrices
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PriceRequest'
+      operationId: getProductPrice
+      parameters:
+        - name: productId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: brandId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: applicationDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: Price found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PriceResponse'
+                $ref: '#/components/schemas/ProductPriceResponse'
         '404':
           description: No applicable price found
 
 components:
   schemas:
-    PriceRequest:
-      type: object
-      required:
-        - applicationDate
-        - productId
-        - brandId
-      properties:
-        applicationDate:
-          type: string
-          format: date-time
-        productId:
-          type: integer
-          format: int64
-        brandId:
-          type: integer
-          format: int64
-    PriceResponse:
+    ProductPriceResponse:
       type: object
       properties:
         productId:

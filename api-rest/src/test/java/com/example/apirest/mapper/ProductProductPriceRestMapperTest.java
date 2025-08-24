@@ -1,8 +1,8 @@
 package com.example.apirest.mapper;
 
-import com.example.api.dto.PriceResponse;
-import com.example.domain.entity.Price;
-import com.example.domain.vo.Money;
+import com.example.api.dto.ProductPriceResponse;
+import com.example.domain.entity.ProductPrice;
+import com.example.domain.vo.Price;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PriceRestMapperTest {
+public class ProductProductPriceRestMapperTest {
 
-    private final PriceRestMapper mapper = Mappers.getMapper(PriceRestMapper.class);
+    private final ProductPriceRestMapper mapper = Mappers.getMapper(ProductPriceRestMapper.class);
 
     @Test
     void toDto_ShouldMapAllFieldsCorrectly_WhenPriceHasData() {
@@ -21,7 +21,7 @@ public class PriceRestMapperTest {
         BigDecimal amount = new BigDecimal("9.99");
         String currency = "EUR";
 
-        Price price = new Price(
+        ProductPrice productPrice = new ProductPrice(
                 1L,
                 100L,
                 2L,
@@ -29,10 +29,10 @@ public class PriceRestMapperTest {
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(10),
                 1L,
-                new Money(amount, currency)
+                new Price(amount, currency)
         );
 
-        PriceResponse response = mapper.toDto(price);
+        ProductPriceResponse response = mapper.toDto(productPrice);
 
         assertNotNull(response);
         assertEquals(amount, response.getPrice());
@@ -42,7 +42,7 @@ public class PriceRestMapperTest {
     @Test
     void toDto_ShouldHandleNullMoneyObject_WithoutThrowingException() {
 
-        Price price = new Price(
+        ProductPrice productPrice = new ProductPrice(
                 1L,
                 100L,
                 2L,
@@ -53,7 +53,7 @@ public class PriceRestMapperTest {
                 null
         );
 
-        PriceResponse response = mapper.toDto(price);
+        ProductPriceResponse response = mapper.toDto(productPrice);
 
         assertNotNull(response);
         assertNull(response.getPrice());

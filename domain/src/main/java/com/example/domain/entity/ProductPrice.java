@@ -1,10 +1,10 @@
 package com.example.domain.entity;
 
-import com.example.domain.vo.Money;
+import com.example.domain.vo.Price;
 
 import java.time.LocalDateTime;
 
-public record Price(
+public record ProductPrice(
         Long id,
         Long productId,
         Long brandId,
@@ -12,5 +12,5 @@ public record Price(
         LocalDateTime startDate,
         LocalDateTime endDate,
         Long priority,
-        Money money) {
+        Price price) {
 }

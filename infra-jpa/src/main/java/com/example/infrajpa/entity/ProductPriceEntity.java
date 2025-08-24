@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "PRICES")
-public class PriceEntity {
+public class ProductPriceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -114,7 +114,7 @@ public class PriceEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PriceEntity that = (PriceEntity) o;
+        ProductPriceEntity that = (ProductPriceEntity) o;
         return Objects.equals(id, that.id);
     }
 

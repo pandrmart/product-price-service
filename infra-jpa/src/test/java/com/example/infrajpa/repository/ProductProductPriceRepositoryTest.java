@@ -1,6 +1,6 @@
 package com.example.infrajpa.repository;
 
-import com.example.infrajpa.entity.PriceEntity;
+import com.example.infrajpa.entity.ProductPriceEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@ContextConfiguration(classes = PriceRepositoryTest.TestConfig.class)
-public class PriceRepositoryTest {
+@ContextConfiguration(classes = ProductProductPriceRepositoryTest.TestConfig.class)
+public class ProductProductPriceRepositoryTest {
 
     @Autowired
-    private PriceRepository priceRepository;
+    private ProductPriceRepository productPriceRepository;
 
     private Long productId;
     private Long brandId;
@@ -41,9 +41,9 @@ public class PriceRepositoryTest {
         brandId = 1L;
         applicationDate = LocalDateTime.of(2025, 8, 20, 10, 0, 0);
 
-        priceRepository.deleteAll();
+        productPriceRepository.deleteAll();
 
-        PriceEntity price1 = new PriceEntity();
+        ProductPriceEntity price1 = new ProductPriceEntity();
         price1.setProductId(productId);
         price1.setBrandId(brandId);
         price1.setStartDate(LocalDateTime.of(2025, 8, 1, 0, 0, 0));
@@ -52,7 +52,7 @@ public class PriceRepositoryTest {
         price1.setPrice(new BigDecimal("30.00"));
         price1.setCurrency("EUR");
 
-        PriceEntity price2 = new PriceEntity();
+        ProductPriceEntity price2 = new ProductPriceEntity();
         price2.setProductId(productId);
         price2.setBrandId(brandId);
         price2.setStartDate(LocalDateTime.of(2025, 8, 1, 0, 0, 0));
@@ -61,13 +61,13 @@ public class PriceRepositoryTest {
         price2.setPrice(new BigDecimal("25.00"));
         price2.setCurrency("EUR");
 
-        priceRepository.saveAll(List.of(price1, price2));
+        productPriceRepository.saveAll(List.of(price1, price2));
     }
 
     @Test
     void findFirstByMethod_shouldReturnHighestPriorityPrice() {
 
-        Optional<PriceEntity> foundPrice = priceRepository.findFirstByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+        Optional<ProductPriceEntity> foundPrice = productPriceRepository.findFirstByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
                 productId, brandId, applicationDate, applicationDate
         );
 
@@ -79,9 +79,9 @@ public class PriceRepositoryTest {
     @Test
     void findFirstByMethod_shouldReturnEmptyOptional_whenNoPriceMatches() {
 
-        priceRepository.deleteAll();
+        productPriceRepository.deleteAll();
 
-        Optional<PriceEntity> foundPrice = priceRepository.findFirstByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
+        Optional<ProductPriceEntity> foundPrice = productPriceRepository.findFirstByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
                 productId, brandId, applicationDate, applicationDate
         );
 
@@ -91,7 +91,7 @@ public class PriceRepositoryTest {
     @Test
     void findPrice_shouldReturnAllPricesOrderedByPriority() {
 
-        List<PriceEntity> foundPrices = priceRepository.findPrice(productId, brandId, applicationDate);
+        List<ProductPriceEntity> foundPrices = productPriceRepository.findPrice(productId, brandId, applicationDate);
 
         assertEquals(2, foundPrices.size());
         assertEquals(1L, foundPrices.get(0).getPriority());
@@ -103,9 +103,9 @@ public class PriceRepositoryTest {
     @Test
     void findPrice_shouldReturnEmptyList_whenNoPriceMatches() {
 
-        priceRepository.deleteAll();
+        productPriceRepository.deleteAll();
 
-        List<PriceEntity> foundPrices = priceRepository.findPrice(productId, brandId, applicationDate);
+        List<ProductPriceEntity> foundPrices = productPriceRepository.findPrice(productId, brandId, applicationDate);
 
         assertTrue(foundPrices.isEmpty());
     }
