@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ProductProductPriceEntityTest {
 
     @Test
-    void priceEntity_shouldSetAndGetFieldsCorrectly() {
+    void productPriceEntity_shouldSetAndGetFieldsCorrectly() {
 
         ProductPriceEntity productPriceEntity = new ProductPriceEntity();
 
@@ -47,7 +47,7 @@ public class ProductProductPriceEntityTest {
     }
 
     @Test
-    void priceEntity_shouldBeEqual_whenIdsAreSame() {
+    void productPriceEntity_shouldBeEqual_whenIdsAreSame() {
 
         Long sharedId = 1L;
         ProductPriceEntity entity1 = new ProductPriceEntity();
@@ -63,7 +63,7 @@ public class ProductProductPriceEntityTest {
     }
 
     @Test
-    void priceEntity_shouldNotBeEqual_whenIdsAreDifferent() {
+    void productPriceEntity_shouldNotBeEqual_whenIdsAreDifferent() {
 
         ProductPriceEntity entity1 = new ProductPriceEntity();
         entity1.setId(1L);

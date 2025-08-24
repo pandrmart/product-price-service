@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class PriceTest {
 
     @Test
-    void moneyRecord_shouldBeCreatedCorrectly_withValidArguments() {
+    void priceRecord_shouldBeCreatedCorrectly_withValidArguments() {
 
         BigDecimal validAmount = new BigDecimal("10.50");
         String validCurrency = "EUR";
@@ -24,7 +24,7 @@ public class PriceTest {
     }
 
     @Test
-    void moneyRecord_shouldThrowException_whenAmountIsNull() {
+    void priceRecord_shouldThrowException_whenAmountIsNull() {
 
         BigDecimal invalidAmount = null;
 
@@ -32,7 +32,7 @@ public class PriceTest {
     }
 
     @Test
-    void moneyRecord_shouldThrowException_whenCurrencyIsNull() {
+    void priceRecord_shouldThrowException_whenCurrencyIsNull() {
 
         String invalidCurrency = null;
 
@@ -40,7 +40,7 @@ public class PriceTest {
     }
 
     @Test
-    void moneyRecord_shouldThrowException_whenAmountIsNegative() {
+    void priceRecord_shouldThrowException_whenAmountIsNegative() {
 
         BigDecimal negativeAmount = new BigDecimal("-5.00");
 
@@ -48,7 +48,7 @@ public class PriceTest {
     }
 
     @Test
-    void moneyRecord_shouldThrowException_whenCurrencyLengthIsNotThree() {
+    void priceRecord_shouldThrowException_whenCurrencyLengthIsNotThree() {
 
         String invalidCurrency = "EU";
 

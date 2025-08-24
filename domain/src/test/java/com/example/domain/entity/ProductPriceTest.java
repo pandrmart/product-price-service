@@ -34,7 +34,7 @@ public class ProductPriceTest {
     }
 
     @Test
-    void priceRecord_ShouldBeInstantiatedCorrectly() {
+    void productPriceRecord_ShouldBeInstantiatedCorrectly() {
 
         ProductPrice productPrice = new ProductPrice(id, productId, brandId, priceList, startDate, endDate, priority, price);
 
@@ -50,7 +50,7 @@ public class ProductPriceTest {
     }
 
     @Test
-    void priceRecord_ShouldHandleEqualsAndHashCodeCorrectly() {
+    void productPriceRecord_ShouldHandleEqualsAndHashCodeCorrectly() {
 
         ProductPrice productPrice1 = new ProductPrice(id, productId, brandId, priceList, startDate, endDate, priority, price);
         ProductPrice productPrice2 = new ProductPrice(id, productId, brandId, priceList, startDate, endDate, priority, price);

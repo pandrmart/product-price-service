@@ -1,8 +1,10 @@
 package com.example.apirest;
 
 import com.example.api.dto.ProductPriceResponse;
+import com.example.apirest.exception.InvalidProductPriceRequestException;
 import com.example.apirest.mapper.ProductPriceRestMapper;
 import com.example.domain.entity.ProductPrice;
+import com.example.domain.exception.ProductPriceNotFoundException;
 import com.example.domain.port.in.GetProductPriceUseCase;
 import com.example.domain.vo.Price;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,9 +18,9 @@ import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,10 +63,10 @@ class ProductProductPriceControllerTest {
     }
 
     @Test
-    void searchPrices_ShouldReturnOkWithPrice_WhenPriceFound() {
+    void getProductPrice_ShouldReturnOkWithPrice_WhenPriceFound() {
 
         when(getProductPriceUseCase.getProductPrice(testProductId, testBrandId, testApplicationDate))
-                .thenReturn(Optional.of(testProductPriceDomain));
+                .thenReturn(testProductPriceDomain);
 
         when(mapper.toDto(testProductPriceDomain))
                 .thenReturn(testProductPriceResponse);
@@ -79,16 +81,66 @@ class ProductProductPriceControllerTest {
     }
 
     @Test
-    void searchPrices_ShouldReturnNotFound_WhenPriceNotFound() {
+    void getProductPrice_ShouldThrowException_WhenPriceNotFound() {
 
-        when(getProductPriceUseCase.getProductPrice(testProductId, testBrandId, testApplicationDate))
-                .thenReturn(Optional.empty());
+        doThrow(new ProductPriceNotFoundException(testProductId, testBrandId, testApplicationDate))
+                .when(getProductPriceUseCase)
+                .getProductPrice(testProductId, testBrandId, testApplicationDate);
 
-        ResponseEntity<ProductPriceResponse> responseEntity = productPriceController.getProductPrice(
-                testProductId, testBrandId, testApplicationDate);
+        assertThrows(
+                ProductPriceNotFoundException.class,
+                () -> productPriceController.getProductPrice(testProductId, testBrandId, testApplicationDate)
+        );
+    }
 
-        assertNotNull(responseEntity);
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertNull(responseEntity.getBody());
+    @Test
+    void getProductPrice_ShouldThrowInvalidRequestException_WhenParametersAreNull() {
+
+        assertThrows(
+                InvalidProductPriceRequestException.class,
+                () -> productPriceController.getProductPrice(null, testBrandId, testApplicationDate)
+        );
+
+        assertThrows(
+                InvalidProductPriceRequestException.class,
+                () -> productPriceController.getProductPrice(testProductId, null, testApplicationDate)
+        );
+
+        assertThrows(
+                InvalidProductPriceRequestException.class,
+                () -> productPriceController.getProductPrice(testProductId, testBrandId, null)
+        );
+    }
+
+    @Test
+    void getProductPrice_ShouldThrowInvalidRequestException_WhenProductIdIsZeroOrNegative() {
+
+        assertThrows(
+                InvalidProductPriceRequestException.class,
+                () -> productPriceController.getProductPrice(0L, testBrandId, testApplicationDate),
+                "Expected InvalidProductPriceRequestException for productId=0"
+        );
+
+        assertThrows(
+                InvalidProductPriceRequestException.class,
+                () -> productPriceController.getProductPrice(-1L, testBrandId, testApplicationDate),
+                "Expected InvalidProductPriceRequestException for productId=-1"
+        );
+    }
+
+    @Test
+    void getProductPrice_ShouldThrowInvalidRequestException_WhenBrandIdIsZeroOrNegative() {
+
+        assertThrows(
+                InvalidProductPriceRequestException.class,
+                () -> productPriceController.getProductPrice(35455L, 0L, testApplicationDate),
+                "Expected InvalidProductPriceRequestException for brandId=0"
+        );
+
+        assertThrows(
+                InvalidProductPriceRequestException.class,
+                () -> productPriceController.getProductPrice(35455L, -1L, testApplicationDate),
+                "Expected InvalidProductPriceRequestException for brandId=-1"
+        );
     }
 }

@@ -1,6 +1,7 @@
 package com.example.application.adapter.in;
 
 import com.example.domain.entity.ProductPrice;
+import com.example.domain.exception.ProductPriceNotFoundException;
 import com.example.domain.port.out.GetProductPricePort;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,10 +12,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class GetProductPriceServiceTest {
@@ -30,7 +29,7 @@ public class GetProductPriceServiceTest {
     private final LocalDateTime applicationDate = LocalDateTime.now();
 
     @Test
-    void getPrice_ShouldReturnProductPrice_WhenPortFindsIt() {
+    void getProductPrice_ShouldReturnProductPrice_WhenPortFindsIt() {
 
         ProductPrice expectedProductPrice = new ProductPrice(
                 1L, productId, brandId, 1L,
@@ -42,23 +41,36 @@ public class GetProductPriceServiceTest {
         when(getProductPricePort.getProductPrice(productId, brandId, applicationDate))
                 .thenReturn(Optional.of(expectedProductPrice));
 
-        Optional<ProductPrice> actualPrice = getPriceService.getProductPrice(productId, brandId, applicationDate);
+        ProductPrice actualPrice = getPriceService.getProductPrice(productId, brandId, applicationDate);
 
-        assertTrue(actualPrice.isPresent());
-        assertEquals(expectedProductPrice, actualPrice.get());
+        assertEquals(expectedProductPrice, actualPrice);
 
         verify(getProductPricePort).getProductPrice(productId, brandId, applicationDate);
     }
 
     @Test
-    void getPrice_ShouldReturnEmptyOptional_WhenPortDoesNotFindProductPrice() {
+    void getProductPrice_ShouldReturnEmptyOptional_WhenPortDoesNotFindProductPrice() {
 
         when(getProductPricePort.getProductPrice(productId, brandId, applicationDate))
                 .thenReturn(Optional.empty());
 
-        Optional<ProductPrice> actualPrice = getPriceService.getProductPrice(productId, brandId, applicationDate);
+        assertThrows(
+                ProductPriceNotFoundException.class,
+                () -> getPriceService.getProductPrice(productId, brandId, applicationDate)
+        );
 
-        assertTrue(actualPrice.isEmpty());
+        verify(getProductPricePort).getProductPrice(productId, brandId, applicationDate);
+    }
+
+    @Test
+    void getProductPrice_ShouldThrowProductPriceNotFoundException_WhenPortReturnsEmptyOptional() {
+
+        when(getProductPricePort.getProductPrice(productId, brandId, applicationDate))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ProductPriceNotFoundException.class,
+                () -> getPriceService.getProductPrice(productId, brandId, applicationDate)
+        );
 
         verify(getProductPricePort).getProductPrice(productId, brandId, applicationDate);
     }

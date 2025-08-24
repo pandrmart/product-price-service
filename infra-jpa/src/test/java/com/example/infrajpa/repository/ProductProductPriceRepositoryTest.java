@@ -89,7 +89,7 @@ public class ProductProductPriceRepositoryTest {
     }
 
     @Test
-    void findPrice_shouldReturnAllPricesOrderedByPriority() {
+    void findProductPrice_shouldReturnAllPricesOrderedByPriority() {
 
         List<ProductPriceEntity> foundPrices = productPriceRepository.findPrice(productId, brandId, applicationDate);
 
@@ -101,7 +101,7 @@ public class ProductProductPriceRepositoryTest {
     }
 
     @Test
-    void findPrice_shouldReturnEmptyList_whenNoPriceMatches() {
+    void findProductPrice_shouldReturnEmptyList_whenNoPriceMatches() {
 
         productPriceRepository.deleteAll();
 

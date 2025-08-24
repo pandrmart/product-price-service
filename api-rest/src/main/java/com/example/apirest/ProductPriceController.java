@@ -2,7 +2,9 @@ package com.example.apirest;
 
 import com.example.api.controller.ProductPriceApi;
 import com.example.api.dto.ProductPriceResponse;
+import com.example.apirest.exception.InvalidProductPriceRequestException;
 import com.example.apirest.mapper.ProductPriceRestMapper;
+import com.example.domain.entity.ProductPrice;
 import com.example.domain.port.in.GetProductPriceUseCase;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,20 @@ public class ProductPriceController implements ProductPriceApi {
     public ResponseEntity<ProductPriceResponse> getProductPrice(@RequestParam Long productId,
                                                                 @RequestParam Long brandId,
                                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applicationDate) {
-        return getProductPriceUseCase.getProductPrice(productId, brandId, applicationDate).map(mapper::toDto).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+
+        if (productId == null || brandId == null || applicationDate == null) {
+            throw new InvalidProductPriceRequestException(productId, brandId, applicationDate);
+        }
+
+        if (productId <= 0) {
+            throw new InvalidProductPriceRequestException("Product ID cannot be zero or negative");
+        }
+
+        if (brandId <= 0) {
+            throw new InvalidProductPriceRequestException("Brand ID cannot be zero or negative");
+        }
+
+        ProductPrice productPrice = getProductPriceUseCase.getProductPrice(productId, brandId, applicationDate);
+        return ResponseEntity.ok(mapper.toDto(productPrice));
     }
 }

@@ -56,7 +56,7 @@ public class GetProductPriceAdapterTest {
     }
 
     @Test
-    void getPrice_ShouldReturnMappedPrice_WhenRepositoryFindsIt() {
+    void getProductPrice_ShouldReturnMappedPrice_WhenRepositoryFindsIt() {
 
         when(productPriceRepository.findPrice(testProductId, testBrandId, testApplicationDate))
                 .thenReturn(List.of(testProductPriceEntity));
@@ -74,7 +74,7 @@ public class GetProductPriceAdapterTest {
     }
 
     @Test
-    void getPrice_ShouldReturnEmptyOptional_WhenRepositoryFindsNothing() {
+    void getProductPrice_ShouldReturnEmptyOptional_WhenRepositoryFindsNothing() {
 
         when(productPriceRepository.findPrice(testProductId, testBrandId, testApplicationDate))
                 .thenReturn(Collections.emptyList());
