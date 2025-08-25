@@ -4,7 +4,7 @@ info:
   version: 1.0.0
 
 paths:
-  /product-price/search:
+  /api/v1/product-price:
     get:
       summary: Search applicable price
       tags:
