@@ -43,7 +43,7 @@ public class ProductPriceController implements ProductPriceApi {
      * @param applicationDate   The date and time of the application.
      * @return The found ProductPrice matching the criteria.
      * @throws InvalidProductPriceRequestException if the input parameters are invalid.
-     * @throws ProductPriceNotFoundException if no applicable price is found.
+     * @throws com.example.domain.exception.ProductPriceNotFoundException if no applicable price is found.
      */
     @Override
     public ResponseEntity<ProductPriceResponse> getProductPrice(@RequestParam Long productId,

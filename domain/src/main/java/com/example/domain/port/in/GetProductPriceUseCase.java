@@ -18,7 +18,7 @@ public interface GetProductPriceUseCase {
      * @param brandId The unique identifier of the brand.
      * @param applicationDate The date and time for which the price is requested.
      * @return The found ProductPrice matching the criteria.
-     * @throws ProductPriceNotFoundException if no applicable price is found.
+     * @throws com.example.domain.exception.ProductPriceNotFoundException if no applicable price is found.
      */
     ProductPrice getProductPrice(Long productId, Long brandId, LocalDateTime applicationDate);
 }
