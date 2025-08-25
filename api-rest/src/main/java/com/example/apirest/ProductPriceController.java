@@ -6,6 +6,7 @@ import com.example.apirest.exception.InvalidProductPriceRequestException;
 import com.example.apirest.mapper.ProductPriceRestMapper;
 import com.example.domain.entity.ProductPrice;
 import com.example.domain.port.in.GetProductPriceUseCase;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
+/**
+ * Controller class for the Product Price API.
+ * <p>
+ * This class serves as the entry point for API requests related to product price.
+ * It handles HTTP requests, validates input, and orchestrates the call to the
+ * application's use case layer to retrieve the applicable price.
+ */
 @RestController
+@Slf4j
 public class ProductPriceController implements ProductPriceApi {
 
     private final GetProductPriceUseCase getProductPriceUseCase;
@@ -24,10 +33,24 @@ public class ProductPriceController implements ProductPriceApi {
         this.mapper = productPriceRestMapper;
     }
 
+    /**
+     * Retrieves the applicable product price based on a set of criteria.
+     * This method applies business rules to find the correct price for a product
+     * at a specific brand and application date.
+     *
+     * @param productId         The unique identifier of the product.
+     * @param brandId           The unique identifier of the brand.
+     * @param applicationDate   The date and time of the application.
+     * @return The found ProductPrice matching the criteria.
+     * @throws InvalidProductPriceRequestException if the input parameters are invalid.
+     * @throws ProductPriceNotFoundException if no applicable price is found.
+     */
     @Override
     public ResponseEntity<ProductPriceResponse> getProductPrice(@RequestParam Long productId,
                                                                 @RequestParam Long brandId,
                                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applicationDate) {
+
+        log.info("Request received with productId: {}, brandId: {}, applicationDate: {}", productId, brandId, applicationDate);
 
         if (productId == null || brandId == null || applicationDate == null) {
             throw new InvalidProductPriceRequestException(productId, brandId, applicationDate);
@@ -42,6 +65,8 @@ public class ProductPriceController implements ProductPriceApi {
         }
 
         ProductPrice productPrice = getProductPriceUseCase.getProductPrice(productId, brandId, applicationDate);
+        log.info("Product price found and will be returned");
+
         return ResponseEntity.ok(mapper.toDto(productPrice));
     }
 }
