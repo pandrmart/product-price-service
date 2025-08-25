@@ -4,6 +4,7 @@ import com.example.domain.entity.ProductPrice;
 import com.example.domain.port.out.GetProductPricePort;
 import com.example.infrajpa.mapper.ProductPriceMapper;
 import com.example.infrajpa.repository.ProductPriceRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
@@ -20,15 +21,11 @@ import java.util.Optional;
  */
 @Repository
 @Slf4j
+@RequiredArgsConstructor
 public class GetProductProductPriceAdapter implements GetProductPricePort {
 
     private final ProductPriceRepository productPriceRepository;
     private final ProductPriceMapper mapper;
-
-    public GetProductProductPriceAdapter(ProductPriceRepository productPriceRepository, ProductPriceMapper productPriceMapper) {
-        this.productPriceRepository = productPriceRepository;
-        this.mapper = productPriceMapper;
-    }
 
     @Override
     public Optional<ProductPrice> getProductPrice(Long productId, Long brandId, LocalDateTime applicationDate) {

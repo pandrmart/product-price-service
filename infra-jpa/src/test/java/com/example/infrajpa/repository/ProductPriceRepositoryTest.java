@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@ContextConfiguration(classes = ProductProductPriceRepositoryTest.TestConfig.class)
-public class ProductProductPriceRepositoryTest {
+@ContextConfiguration(classes = ProductPriceRepositoryTest.TestConfig.class)
+public class ProductPriceRepositoryTest {
 
     @Autowired
     private ProductPriceRepository productPriceRepository;

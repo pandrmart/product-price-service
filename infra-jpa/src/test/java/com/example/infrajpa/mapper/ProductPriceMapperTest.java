@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ProductProductPriceMapperTest {
+public class ProductPriceMapperTest {
 
     private final ProductPriceMapper mapper = Mappers.getMapper(ProductPriceMapper.class);
 
