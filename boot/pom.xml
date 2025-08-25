@@ -8,13 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <artifactId>boot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>boot</name>
-    <description>boot</description>
-    <properties>
-        <java.version>21</java.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -27,6 +23,18 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>application</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>infra-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>api-rest</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
@@ -35,21 +43,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>api-rest</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>application</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>infra-jpa</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.intuit.karate</groupId>
