@@ -8,11 +8,11 @@
         <version>3.5.5</version>
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>product-pricing-service</artifactId>
+    <artifactId>product-price-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>product-pricing-service</name>
-    <description>product-pricing-service</description>
+    <name>product-price-service</name>
+    <description>product-price-service</description>
 
     <modules>
         <module>domain</module>

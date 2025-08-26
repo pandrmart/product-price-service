@@ -87,8 +87,8 @@ Asegúrate de tener **Maven** y **Java 21** instalados en tu sistema.
 
 1.  **Clona el repositorio**:
     ```bash
-    git clone https://github.com/pandrmart/product-pricing-service.git
-    cd product-pricing-service
+    git clone https://github.com/pandrmart/product-price-service.git
+    cd product-price-service
     ```
 
 2.  **Configura JAVA_HOME**:
