@@ -4,7 +4,7 @@ API diseñada para consultar el precio de un producto en una fecha y hora espec�
 
 ## 💡 Visión General del Proyecto
 
-Este proyecto implementa una API REST para gestionar precios de productos, siguiendo una **Arquitectura Hexagonal (Puertos y Adaptadores)**. Esta elección arquitectónica promueve una **clara separación de preocupaciones**, **bajo acoplamiento** y facilita la **mantenibilidad, testeo y escalabilidad**.
+Este proyecto implementa una API REST para gestionar precios de productos, siguiendo los principios de **Arquitectura Hexagonal (Puertos y Adaptadores)** y **Domain-Driven Design (DDD)**. Esta elección arquitectónica promueve una **clara separación de preocupaciones**, **bajo acoplamiento** y facilita la **mantenibilidad, testeo y escalabilidad**.
 
 ## 🛠️ Built With
 
@@ -20,6 +20,8 @@ Este proyecto implementa una API REST para gestionar precios de productos, sigui
 ## 🏗️ Arquitectura y Módulos
 
 La solución está estructurada como un proyecto multi-módulo Maven, donde cada módulo representa una capa de la arquitectura hexagonal.
+
+> **Nota:** Este proyecto sigue un enfoque **API-first**: la API se define primero mediante OpenAPI (`openapi.yaml`) y se utiliza para generar interfaces, DTOs y controladores.
 
 * **`parent`**: Módulo raíz que centraliza la gestión de dependencias (`<dependencyManagement>`) y la configuración global para todos los submódulos. Define la versión de Spring Boot (BOM) y otras dependencias comunes, evitando duplicidad de versiones en los hijos.
 
@@ -49,9 +51,9 @@ La solución está estructurada como un proyecto multi-módulo Maven, donde cada
 * **`infra-jpa`**:
 
     * **Propósito**: Actúa como **adaptador de salida**. Contiene la lógica para interactuar con la base de datos usando **Spring Data JPA/Hibernate**.  
-      Implementa los **puertos de salida del dominio** y se encarga de mapear entidades y repositorios.
+      Implementa los **puertos de salida del dominio** y se encarga de mapear entidades y repositorios. Originalmente se utilizó la convención de nombres de Spring Data JPA para generar queries automáticamente, pero resultó en un método demasiado largo, así que por elegancia se optó por JPQL.
 
-    * **Dependencias**: Depende del módulo `domain` y de las librerías de persistencia (Spring Boot Starter JPA, H2 para tests).
+      * **Dependencias**: Depende del módulo `domain` y de las librerías de persistencia (Spring Boot Starter JPA, H2 para tests).
 
 * **`boot`**:
 
@@ -94,7 +96,11 @@ Asegúrate de tener **Maven** y **Java 21** instalados en tu sistema.
 2.  **Configura JAVA_HOME**:
     Asegúrate de que la variable de entorno **`JAVA_HOME`** apunte a tu instalación de **Java 21** para evitar problemas de compilación.
 
-3.  **Compila y empaqueta el proyecto**:
+3.  **Compila y empaqueta el proyecto**:  
+    **Nota:** Este proyecto utiliza OpenAPI Generator para crear las interfaces de la API y DTOs. Puedes generar las fuentes con:
+    ```bash
+    mvn clean generate-sources
+    ```
     Desde el directorio raíz del proyecto (donde se encuentra el `pom.xml` padre), ejecuta:
     ```bash
     mvn clean install
@@ -122,6 +128,8 @@ Este proyecto usa una base de datos **H2 en memoria** para simplificar la ejecuc
 ### 1. Obtener Precio de Producto
 
 Retorna el precio aplicable para un producto y marca en una fecha y hora determinadas.
+
+> **Nota:** Se ha optado por usar `product-price` en singular en la URL, en lugar de seguir estrictamente la convención RESTful de recursos plurales, porque este endpoint devuelve **exactamente un precio** y no una colección de precios.
 
 * **Método**: `GET`
 

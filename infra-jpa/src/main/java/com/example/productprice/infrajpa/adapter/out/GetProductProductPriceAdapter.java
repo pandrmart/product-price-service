@@ -30,7 +30,6 @@ public class GetProductProductPriceAdapter implements GetProductPricePort {
     @Override
     public Optional<ProductPrice> getProductPrice(Long productId, Long brandId, LocalDateTime applicationDate) {
         log.debug("Searching in database with productId={}, brandId={}, applicationDate={}", productId, brandId, applicationDate);
-//        return priceRepository.findFirstByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(productId, brandId, applicationDate, applicationDate).map(mapper::toDomain);
         try {
             return productPriceRepository.findPrice(productId, brandId, applicationDate)
                     .stream()

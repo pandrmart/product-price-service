@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ProductPriceTest {
 
@@ -33,5 +32,68 @@ public class ProductPriceTest {
         assertEquals(endDate, productPrice.endDate());
         assertEquals(priority, productPrice.priority());
         assertEquals(price, productPrice.price());
+    }
+
+    @Test
+    void productPriceRecord_ShouldThrowException_WhenRequiredFieldsAreNull() {
+
+        Price price = new Price(new BigDecimal("12.34"), "EUR");
+        LocalDateTime startDate = LocalDateTime.now();
+        LocalDateTime endDate = LocalDateTime.now().plusDays(1);
+
+        assertThrows(NullPointerException.class, () ->
+                new ProductPrice(null, 1L, 1L, startDate, endDate, 1L, price)
+        );
+        assertThrows(NullPointerException.class, () ->
+                new ProductPrice(1L, null, 1L, startDate, endDate, 1L, price)
+        );
+        assertThrows(NullPointerException.class, () ->
+                new ProductPrice(1L, 1L, null, startDate, endDate, 1L, price)
+        );
+        assertThrows(NullPointerException.class, () ->
+                new ProductPrice(1L, 1L, 1L, null, endDate, 1L, price)
+        );
+        assertThrows(NullPointerException.class, () ->
+                new ProductPrice(1L, 1L, 1L, startDate, null, 1L, price)
+        );
+        assertThrows(NullPointerException.class, () ->
+                new ProductPrice(1L, 1L, 1L, startDate, endDate, null, price)
+        );
+        assertThrows(NullPointerException.class, () ->
+                new ProductPrice(1L, 1L, 1L, startDate, endDate, 1L, null)
+        );
+    }
+
+    @Test
+    void productPriceRecord_ShouldThrowException_WhenIdsAreNonPositive() {
+
+        Price price = new Price(new BigDecimal("12.34"), "EUR");
+        LocalDateTime startDate = LocalDateTime.now();
+        LocalDateTime endDate = LocalDateTime.now().plusDays(1);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new ProductPrice(0L, 1L, 1L, startDate, endDate, 1L, price)
+        );
+        assertThrows(IllegalArgumentException.class, () ->
+                new ProductPrice(-1L, 1L, 1L, startDate, endDate, 1L, price)
+        );
+        assertThrows(IllegalArgumentException.class, () ->
+                new ProductPrice(1L, 0L, 1L, startDate, endDate, 1L, price)
+        );
+        assertThrows(IllegalArgumentException.class, () ->
+                new ProductPrice(1L, -1L, 1L, startDate, endDate, 1L, price)
+        );
+    }
+
+    @Test
+    void productPriceRecord_ShouldThrowException_WhenEndDateBeforeStartDate() {
+
+        Price price = new Price(new BigDecimal("12.34"), "EUR");
+        LocalDateTime startDate = LocalDateTime.now();
+        LocalDateTime endDate = startDate.minusDays(1);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new ProductPrice(1L, 1L, 1L, startDate, endDate, 1L, price)
+        );
     }
 }

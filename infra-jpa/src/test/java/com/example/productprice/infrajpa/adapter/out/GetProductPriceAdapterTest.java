@@ -1,6 +1,7 @@
 package com.example.productprice.infrajpa.adapter.out;
 
 import com.example.productprice.domain.entity.ProductPrice;
+import com.example.productprice.domain.vo.Price;
 import com.example.productprice.infrajpa.entity.ProductPriceEntity;
 import com.example.productprice.infrajpa.mapper.ProductPriceMapper;
 import com.example.productprice.infrajpa.repository.ProductPriceRepository;
@@ -11,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -49,9 +51,14 @@ public class GetProductPriceAdapterTest {
         testProductPriceEntity.setProductId(testProductId);
         testProductPriceEntity.setBrandId(testBrandId);
 
+        LocalDateTime startDate = testApplicationDate.minusDays(1);
+        LocalDateTime endDate = testApplicationDate.plusDays(1);
+
+        Price price = new Price(new BigDecimal("12.34"), "EUR");
+
         testProductPriceDomain = new ProductPrice(
                 testProductId, testBrandId, 1L,
-                LocalDateTime.now(), LocalDateTime.now(), 1L, null
+                startDate, endDate, 1L, price
         );
     }
 

@@ -3,17 +3,21 @@ package com.example.productprice.application.adapter.in;
 import com.example.productprice.domain.entity.ProductPrice;
 import com.example.productprice.domain.exception.ProductPriceNotFoundException;
 import com.example.productprice.domain.port.out.GetProductPricePort;
+import com.example.productprice.domain.vo.Price;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 public class GetProductPriceServiceTest {
@@ -31,11 +35,13 @@ public class GetProductPriceServiceTest {
     @Test
     void getProductPrice_ShouldReturnProductPrice_WhenPortFindsIt() {
 
+        Price price = new Price(new BigDecimal("12.34"), "EUR");
+
         ProductPrice expectedProductPrice = new ProductPrice(
                 productId, brandId, 1L,
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
-                1L, null
+                1L, price
         );
 
         when(getProductPricePort.getProductPrice(productId, brandId, applicationDate))

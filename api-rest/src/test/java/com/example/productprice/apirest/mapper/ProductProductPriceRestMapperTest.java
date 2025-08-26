@@ -39,22 +39,33 @@ public class ProductProductPriceRestMapperTest {
     }
 
     @Test
-    void toDto_ShouldHandleNullMoneyObject_WithoutThrowingException() {
+    void toDto_ShouldMapAllFieldsCorrectly() {
+
+        BigDecimal amount = new BigDecimal("9.99");
+        String currency = "EUR";
+
+        LocalDateTime startDate = LocalDateTime.of(2025, 8, 26, 10, 0);
+        LocalDateTime endDate = LocalDateTime.of(2025, 8, 27, 10, 0);
 
         ProductPrice productPrice = new ProductPrice(
                 100L,
                 2L,
                 1L,
-                LocalDateTime.now(),
-                LocalDateTime.now().plusDays(10),
+                startDate,
+                endDate,
                 1L,
-                null
+                new Price(amount, currency)
         );
 
         ProductPriceResponse response = mapper.toDto(productPrice);
 
         assertNotNull(response);
-        assertNull(response.getPrice());
-        assertNull(response.getCurrency());
+        assertEquals(100L, response.getProductId());
+        assertEquals(2L, response.getBrandId());
+        assertEquals(1L, response.getPriceList());
+        assertEquals(startDate, response.getStartDate());
+        assertEquals(endDate, response.getEndDate());
+        assertEquals(amount, response.getPrice());
+        assertEquals(currency, response.getCurrency());
     }
 }
