@@ -33,7 +33,6 @@ public class ProductPriceMapperTest {
         ProductPrice domainRecord = mapper.toDomain(entity);
 
         assertNotNull(domainRecord);
-        assertEquals(entity.getId(), domainRecord.id());
         assertEquals(entity.getProductId(), domainRecord.productId());
         assertEquals(entity.getBrandId(), domainRecord.brandId());
         assertEquals(entity.getPriceList(), domainRecord.priceList());

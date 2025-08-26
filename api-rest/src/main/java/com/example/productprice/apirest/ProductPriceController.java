@@ -2,11 +2,9 @@ package com.example.productprice.apirest;
 
 import com.example.api.controller.ProductPriceApi;
 import com.example.api.dto.ProductPriceResponse;
-import com.example.productprice.apirest.exception.InvalidProductPriceRequestException;
 import com.example.productprice.apirest.mapper.ProductPriceRestMapper;
 import com.example.productprice.domain.entity.ProductPrice;
 import com.example.productprice.domain.port.in.GetProductPriceUseCase;
-import com.example.productprice.domain.exception.ProductPriceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +41,6 @@ public class ProductPriceController implements ProductPriceApi {
      * @param brandId           The unique identifier of the brand.
      * @param applicationDate   The date and time of the application.
      * @return The found ProductPrice matching the criteria.
-     * @throws InvalidProductPriceRequestException if the input parameters are invalid.
-     * @throws ProductPriceNotFoundException if no applicable price is found.
      */
     @Override
     public ResponseEntity<ProductPriceResponse> getProductPrice(@RequestParam Long productId,
@@ -52,18 +48,6 @@ public class ProductPriceController implements ProductPriceApi {
                                                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applicationDate) {
 
         log.info("Request received with productId: {}, brandId: {}, applicationDate: {}", productId, brandId, applicationDate);
-
-        if (productId == null || brandId == null || applicationDate == null) {
-            throw new InvalidProductPriceRequestException(productId, brandId, applicationDate);
-        }
-
-        if (productId <= 0) {
-            throw new InvalidProductPriceRequestException("Product ID cannot be zero or negative");
-        }
-
-        if (brandId <= 0) {
-            throw new InvalidProductPriceRequestException("Brand ID cannot be zero or negative");
-        }
 
         ProductPrice productPrice = getProductPriceUseCase.getProductPrice(productId, brandId, applicationDate);
         log.info("Product price found and will be returned");

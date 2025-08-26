@@ -18,12 +18,14 @@ paths:
           schema:
             type: integer
             format: int64
+            minimum: 1
         - name: brandId
           in: query
           required: true
           schema:
             type: integer
             format: int64
+            minimum: 1
         - name: applicationDate
           in: query
           required: true

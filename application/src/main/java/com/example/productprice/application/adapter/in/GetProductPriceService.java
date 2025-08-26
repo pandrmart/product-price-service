@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * Use case implementation for retrieving a product price.
@@ -24,6 +25,15 @@ public class GetProductPriceService implements GetProductPriceUseCase {
 
     @Override
     public ProductPrice getProductPrice(Long productId, Long brandId, LocalDateTime applicationDate) {
+
+        Optional.ofNullable(productId)
+                .filter(id -> id > 0)
+                .orElseThrow(() -> new IllegalArgumentException("Request parameter productId must be min 1"));
+        Optional.ofNullable(brandId)
+                .filter(id -> id > 0)
+                .orElseThrow(() -> new IllegalArgumentException("Request parameter brandId must be min 1"));
+        Optional.ofNullable(applicationDate)
+                .orElseThrow(() -> new IllegalArgumentException("Request parameter applicationDate is missing"));
 
         log.debug("Getting product price for product id {}", productId);
 

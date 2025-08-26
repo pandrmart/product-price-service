@@ -32,7 +32,7 @@ public class GetProductPriceServiceTest {
     void getProductPrice_ShouldReturnProductPrice_WhenPortFindsIt() {
 
         ProductPrice expectedProductPrice = new ProductPrice(
-                1L, productId, brandId, 1L,
+                productId, brandId, 1L,
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 1L, null
@@ -73,5 +73,43 @@ public class GetProductPriceServiceTest {
         );
 
         verify(getProductPricePort).getProductPrice(productId, brandId, applicationDate);
+    }
+
+    @Test
+    void getProductPrice_ShouldThrowIllegalArgumentException_WhenProductIdIsNull() {
+        assertThrows(IllegalArgumentException.class,
+                () -> getPriceService.getProductPrice(null, brandId, applicationDate));
+    }
+
+    @Test
+    void getProductPrice_ShouldThrowIllegalArgumentException_WhenProductIdIsZeroOrNegative() {
+
+        assertThrows(IllegalArgumentException.class,
+                () -> getPriceService.getProductPrice(0L, brandId, applicationDate));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> getPriceService.getProductPrice(-10L, brandId, applicationDate));
+    }
+
+    @Test
+    void getProductPrice_ShouldThrowIllegalArgumentException_WhenBrandIdIsNull() {
+        assertThrows(IllegalArgumentException.class,
+                () -> getPriceService.getProductPrice(productId, null, applicationDate));
+    }
+
+    @Test
+    void getProductPrice_ShouldThrowIllegalArgumentException_WhenBrandIdIsZeroOrNegative() {
+
+        assertThrows(IllegalArgumentException.class,
+                () -> getPriceService.getProductPrice(productId, 0L, applicationDate));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> getPriceService.getProductPrice(productId, -5L, applicationDate));
+    }
+
+    @Test
+    void getProductPrice_ShouldThrowIllegalArgumentException_WhenApplicationDateIsNull() {
+        assertThrows(IllegalArgumentException.class,
+                () -> getPriceService.getProductPrice(productId, brandId, null));
     }
 }

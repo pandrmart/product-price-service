@@ -50,7 +50,7 @@ public class GetProductPriceAdapterTest {
         testProductPriceEntity.setBrandId(testBrandId);
 
         testProductPriceDomain = new ProductPrice(
-                1L, testProductId, testBrandId, 1L,
+                testProductId, testBrandId, 1L,
                 LocalDateTime.now(), LocalDateTime.now(), 1L, null
         );
     }

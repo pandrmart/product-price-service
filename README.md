@@ -31,7 +31,7 @@ La solución está estructurada como un proyecto multi-módulo Maven, donde cada
 
 * **`application`**:
 
-    * **Propósito**: Implementa los **casos de uso (Use Cases)** de la aplicación. Contiene la lógica de negocio principal y orquesta el flujo de datos entre el dominio y los puertos.
+    * **Propósito**: Implementa los **casos de uso (Use Cases)** de la aplicación. Contiene la lógica de negocio principal y orquesta el flujo de datos entre el dominio y los puertos. Lanza la excepción de dominio ProductPriceNotFoundException cuando no existe un precio aplicable y valida los parámetros internos mediante IllegalArgumentException.
 
     * **Dependencias**: Depende del módulo `domain`.
 
@@ -40,6 +40,7 @@ La solución está estructurada como un proyecto multi-módulo Maven, donde cada
     * **Propósito**: Actúa como **adaptador de entrada REST** dentro de la arquitectura hexagonal.  
       Contiene los **controladores REST**, los **DTOs** (Data Transfer Objects) y la **definición OpenAPI** (`openapi.yaml`).  
       Se encarga de la validación de la entrada HTTP, de traducir las peticiones web a llamadas a los casos de uso y de exponer la API como contrato.
+      Traduce excepciones y errores a respuestas HTTP coherentes mediante un GlobalExceptionHandler.
 
     * **Dependencias**: Depende del módulo `application`.
 
@@ -172,7 +173,7 @@ El proyecto cuenta con una sólida estrategia de testing, incluyendo:
 
 * **Tests de Repositorio**: Se utilizan tests de Spring Boot específicos para la capa de persistencia (`@DataJpaTest`) para validar el comportamiento del `ProductPriceRepository`.
 
-* **Tests de Integración**: Empleando **Karate** para asegurar que el API REST funciona correctamente de extremo a extremo, verificando los códigos de estado HTTP y los cuerpos de respuesta para escenarios exitosos y de error. Estos tests se encuentran en el módulo **`boot`**.
+* **Tests de Integración**: Empleando **Karate** para asegurar que el API REST funciona correctamente de extremo a extremo, verificando los códigos de estado HTTP y los cuerpos de respuesta para escenarios exitosos y de error. Los cinco primeros casos de prueba del endpoint podrían compactarse usando un Scenario Outline. Estos tests se encuentran en el módulo **`boot`**.
     * **Ejecución**: Los tests de Karate se ejecutan automáticamente como parte del ciclo de vida de Maven (`test` o `verify`). Puedes ejecutarlos desde la raíz del proyecto o desde el módulo `boot` con `mvn clean verify` o `mvn test`. Alternativamente, puedes **ejecutar directamente `TestRunner` desde tu IDE** como una prueba JUnit normal.
 
 ## 📝 Documentación y Logging

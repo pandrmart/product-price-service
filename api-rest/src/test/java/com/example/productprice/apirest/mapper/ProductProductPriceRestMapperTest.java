@@ -22,7 +22,6 @@ public class ProductProductPriceRestMapperTest {
         String currency = "EUR";
 
         ProductPrice productPrice = new ProductPrice(
-                1L,
                 100L,
                 2L,
                 1L,
@@ -43,7 +42,6 @@ public class ProductProductPriceRestMapperTest {
     void toDto_ShouldHandleNullMoneyObject_WithoutThrowingException() {
 
         ProductPrice productPrice = new ProductPrice(
-                1L,
                 100L,
                 2L,
                 1L,
