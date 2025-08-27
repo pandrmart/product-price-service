@@ -13,11 +13,13 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
- * Adapter for the ProductPrice persistence port.
+ * Adapter implementing the {@link GetProductPricePort} to access {@link ProductPrice} persistence.
  * <p>
  * This class connects the domain layer to the persistence infrastructure (JPA).
- * It translates domain-level requests into database queries and converts JPA entities
- * back into domain objects. It also handles technical exceptions from the database.
+ * It translates domain-level requests into database queries via
+ * {@link ProductPriceRepository} and converts JPA entities back into
+ * {@link ProductPrice} domain objects. Technical exceptions from the database
+ * are caught and wrapped in runtime exceptions.
  */
 @Repository
 @Slf4j

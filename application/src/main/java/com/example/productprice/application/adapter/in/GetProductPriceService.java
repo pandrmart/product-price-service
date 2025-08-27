@@ -11,11 +11,12 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
- * Use case implementation for retrieving a product price.
+ * Application service that implements the {@link GetProductPriceUseCase}.
  * <p>
- * This class contains the core business logic. It orchestrates the flow of data
- * between the API layer and the persistence layer (via the port) and applies
- * business rules such as handling cases where no price is found.
+ * This class represents the application layer for retrieving a {@link ProductPrice}.
+ * It validates input parameters, invokes the {@link GetProductPricePort} to access
+ * the persistence layer, and applies business rules such as throwing an exception
+ * when no matching product price is found.
  */
 @Slf4j
 @RequiredArgsConstructor

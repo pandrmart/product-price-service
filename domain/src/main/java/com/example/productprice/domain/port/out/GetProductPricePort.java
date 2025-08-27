@@ -6,18 +6,21 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
- * Port to access persistence for ProductPrice entities.
- * This contract is implemented by a persistence adapter, a JPA repository.
+ * Output port for accessing persistence of {@link ProductPrice} entities.
+ * <p>
+ * This interface defines the contract for retrieving product prices from the
+ * persistence layer. It is typically implemented by an adapter, such as a JPA repository.
  */
 public interface GetProductPricePort {
 
     /**
-     * Finds the applicable product price in the persistence layer.
+     * Finds the applicable {@link ProductPrice} in the persistence layer.
      *
      * @param productId       The unique identifier of the product.
      * @param brandId         The unique identifier of the brand.
-     * @param applicationDate The date and time to find the valid price.
-     * @return An Optional containing the found ProductPrice, or empty if none is found.
+     * @param applicationDate The date and time for which the price is requested.
+     * @return An {@link Optional} containing the found {@link ProductPrice},
+     *         or empty if no matching price is found.
      */
     Optional<ProductPrice> getProductPrice(Long productId, Long brandId, LocalDateTime applicationDate);
 }

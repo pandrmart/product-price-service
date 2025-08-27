@@ -53,11 +53,11 @@ se utiliza para generar interfaces, DTOs y controladores.
     * **Propósito**: Actúa como **adaptador de entrada REST** dentro de la arquitectura hexagonal.  
       Contiene los **controladores REST**, los **DTOs** (Data Transfer Objects) y la **definición OpenAPI** (
       `openapi.yaml`).  
-      Se encarga de la validación de la entrada HTTP, de traducir las peticiones web a llamadas a los casos de uso y de
-      exponer la API como contrato.
+      Se encarga de la validación de la entrada HTTP, de traducir las peticiones web a llamadas a los casos de uso
+      (puertos de entrada) y de exponer la API como contrato.
       Traduce excepciones y errores a respuestas HTTP coherentes mediante un GlobalExceptionHandler.
 
-    * **Dependencias**: Depende del módulo `application`.
+    * **Dependencias**: Depende del módulo `domain`.
 
     * **Nota**: El **contrato OpenAPI** podría extraerse a un módulo independiente `api-contract`, lo que permitiría
       publicarlo y versionarlo de forma aislada.
@@ -66,12 +66,12 @@ se utiliza para generar interfaces, DTOs y controladores.
 
     * **Propósito**: Actúa como **adaptador de salida**. Contiene la lógica para interactuar con la base de datos usando
       **Spring Data JPA/Hibernate**.  
-      Implementa los **puertos de salida del dominio** y se encarga de mapear entidades y repositorios. Originalmente se
-      utilizó la convención de nombres de Spring Data JPA para generar queries automáticamente, pero resultó en un
-      método demasiado largo, así que por elegancia se optó por JPQL.
+      Capa de infraestructura. Implementa los **puertos de salida del dominio** y se encarga de mapear entidades y
+      repositorios. Originalmente se utilizó la convención de nombres de Spring Data JPA para generar queries
+      automáticamente, pero el método resultó demasiado largo. Por claridad y elegancia, se optó por utilizar JPQL.
 
-        * **Dependencias**: Depende del módulo `domain` y de las librerías de persistencia (Spring Boot Starter JPA, H2
-          para tests).
+    * **Dependencias**: Depende del módulo `domain` y de las librerías de persistencia (Spring Boot Starter Data JPA, H2
+      para tests).
 
 * **`boot`**:
 
@@ -79,8 +79,8 @@ se utiliza para generar interfaces, DTOs y controladores.
       Contiene la clase `main`, la configuración principal (`application.properties`), los recursos como `data.sql` para
       la carga inicial de la base de datos H2 y los **tests de integración End-to-End (E2E) con Karate**.
 
-    * **Dependencias**: Depende de los módulos `apirest`, `application` e `infra-jpa` para arrancar y probar la
-      aplicación completa.  
+    * **Dependencias**: Depende de los módulos `application`, `infra-jpa` y `apirest` para arrancar y probar la
+      aplicación completa, además de añadir la dependencia con la base de datos en memoria H2.  
       Además, dispone del plugin `spring-boot-maven-plugin` para empaquetar y ejecutar la aplicación como un `fat jar`.
 
 ## ⚙️ Tecnologías Utilizadas
@@ -141,7 +141,7 @@ Este proyecto usa una base de datos **H2 en memoria** para simplificar la ejecuc
 
 * Spring Boot está configurado con `spring.jpa.hibernate.ddl-auto=create`, lo que significa que las tablas se crean
   automáticamente a partir de las entidades al iniciar la aplicación.
-* Se ejecuta el archivo `data.sql` en `src/main/resources` para precargar datos de prueba.
+* Se ejecuta el archivo `data.sql` para precargar datos de prueba.
 * Esta configuración es **solo para pruebas y demos**, no debe usarse en producción, ya que recrea la base de datos en
   cada arranque.
 
@@ -167,8 +167,7 @@ RESTful de recursos plurales, porque este endpoint devuelve **exactamente un pre
 
     * `brandId`: ID de la marca (tipo `Long`). **Requerido y debe ser > 0**.
 
-    * `applicationDate`: Fecha y hora para la cual se busca el precio (formato `yyyy-MM-dd'T'HH:mm:ss`). **Requerido y
-      no puede ser una fecha futura**.
+    * `applicationDate`: Fecha y hora para la cual se busca el precio (formato `yyyy-MM-dd'T'HH:mm:ss`). **Requerido**.
 
 * **Ejemplo de Petición**:
 
@@ -214,9 +213,9 @@ El proyecto cuenta con una sólida estrategia de testing, incluyendo:
   para validar el comportamiento del `ProductPriceRepository`.
 
 * **Tests de Integración**: Empleando **Karate** para asegurar que el API REST funciona correctamente de extremo a
-  extremo, verificando los códigos de estado HTTP y los cuerpos de respuesta para escenarios exitosos y de error. Los
-  cinco primeros casos de prueba del endpoint podrían compactarse usando un Scenario Outline. Estos tests se encuentran
-  en el módulo **`boot`**.
+  extremo, verificando los códigos de estado HTTP y los cuerpos de respuesta para escenarios exitosos y de error.
+  Como puntualización, los cinco primeros casos de prueba del endpoint podrían compactarse usando un Scenario Outline.
+  Estos tests se encuentran en el módulo **`boot`**.
     * **Ejecución**: Los tests de Karate se ejecutan automáticamente como parte del ciclo de vida de Maven (`test` o
       `verify`). Puedes ejecutarlos desde la raíz del proyecto o desde el módulo `boot` con `mvn clean verify` o
       `mvn test`. Alternativamente, puedes **ejecutar directamente `TestRunner` desde tu IDE** como una prueba JUnit
@@ -224,13 +223,13 @@ El proyecto cuenta con una sólida estrategia de testing, incluyendo:
 
 ## 📝 Documentación y Logging
 
-* **Javadoc**: Se utiliza extensivamente en interfaces (puertos) y clases públicas para documentar el propósito,
-  parámetros, retornos y excepciones de los métodos, facilitando la comprensión y el mantenimiento del código. En las
-  implementaciones se utiliza `@inheritDoc` para heredar la documentación.
+* **Javadoc**: Se utiliza en interfaces (puertos) y clases públicas para documentar el propósito, parámetros, retornos
+  y excepciones de los métodos, facilitando la comprensión y el mantenimiento del código. En las implementaciones se
+  hereda la documentación de los métodos definida en los puertos.
 
 * **Logging**: Implementado con **SLF4J y Logback**, con una estrategia de logging por capa:
 
-    * **`DEBUG`**: Para trazas detalladas del flujo de ejecución en capas de `application` e `infrastructure`.
+    * **`DEBUG`**: Para trazas detalladas del flujo de ejecución en las capas `application` e `infra-jpa`.
 
     * **`INFO`**: Para eventos importantes de inicio/fin de operaciones de negocio.
 
@@ -238,4 +237,4 @@ El proyecto cuenta con una sólida estrategia de testing, incluyendo:
       API.
 
     * **`ERROR`**: Para fallos críticos del sistema (`500`) en el `GlobalExceptionHandler` y errores técnicos en la capa
-      `infrastructure` (adaptadores), registrando la traza de error completa para depuración interna.
+      `infra-jpa` (adaptadores), registrando la traza de error completa para depuración interna.
