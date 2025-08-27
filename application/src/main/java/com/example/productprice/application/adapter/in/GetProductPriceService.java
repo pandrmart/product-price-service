@@ -35,7 +35,8 @@ public class GetProductPriceService implements GetProductPriceUseCase {
         Optional.ofNullable(applicationDate)
                 .orElseThrow(() -> new IllegalArgumentException("Request parameter applicationDate is missing"));
 
-        log.debug("Getting product price for product id {}", productId);
+        log.debug("Getting product price for productId={}, brandId={}, applicationDate={}",
+                productId, brandId, applicationDate);
 
         return getProductPricePort.
                 getProductPrice(productId, brandId, applicationDate)

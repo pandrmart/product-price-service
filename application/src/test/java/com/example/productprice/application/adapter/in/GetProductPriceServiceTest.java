@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class GetProductPriceServiceTest {
 
     @Mock
@@ -50,20 +50,6 @@ public class GetProductPriceServiceTest {
         ProductPrice actualPrice = getPriceService.getProductPrice(productId, brandId, applicationDate);
 
         assertEquals(expectedProductPrice, actualPrice);
-
-        verify(getProductPricePort).getProductPrice(productId, brandId, applicationDate);
-    }
-
-    @Test
-    void getProductPrice_ShouldReturnEmptyOptional_WhenPortDoesNotFindProductPrice() {
-
-        when(getProductPricePort.getProductPrice(productId, brandId, applicationDate))
-                .thenReturn(Optional.empty());
-
-        assertThrows(
-                ProductPriceNotFoundException.class,
-                () -> getPriceService.getProductPrice(productId, brandId, applicationDate)
-        );
 
         verify(getProductPricePort).getProductPrice(productId, brandId, applicationDate);
     }

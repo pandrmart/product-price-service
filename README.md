@@ -17,8 +17,8 @@ separación de preocupaciones**, **bajo acoplamiento** y facilita la **mantenibi
 - [![JPA](https://img.shields.io/badge/JPA-blue?style=for-the-badge&logo=eclipse-ide&logoColor=white&style=flat)](https://jakarta.ee/specifications/persistence/3.0/)
 - [![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white&style=flat)](https://hibernate.org/)
 - [![JUnit 5](https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=junit5&logoColor=white&style=flat)](https://junit.org/junit5/)
-- [![Mockito](https://img.shields.io/badge/Mockito-4.11.0-blue?style=for-the-badge&logo=mockito&logoColor=white&style=flat)](https://site.mockito.org/)
-- [![Karate](https://img.shields.io/badge/Karate-black?style=for-the-badge&logo=apache&logoColor=white&style=flat)](https://www.karatelabs.io/)
+- [![Mockito](https://img.shields.io/badge/Mockito-9C27B0?style=for-the-badge&style=flat)](https://site.mockito.org/)
+- [![Karate](https://img.shields.io/badge/Karate-2C3E50?style=for-the-badge&style=flat)](https://www.karatelabs.io/)
 
 ## 🏗️ Arquitectura y Módulos
 

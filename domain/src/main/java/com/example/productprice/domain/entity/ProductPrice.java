@@ -4,6 +4,7 @@ import com.example.productprice.domain.vo.Price;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 public record ProductPrice(
         Long productId,
@@ -24,8 +25,16 @@ public record ProductPrice(
         Objects.requireNonNull(priority, "Field priority should not be null");
         Objects.requireNonNull(price, "Field price should not be null");
 
-        if (productId <= 0) throw new IllegalArgumentException("Field productId should be greater than 0");
-        if (brandId <= 0) throw new IllegalArgumentException("Field brandId should be greater than 0");
-        if (endDate.isBefore(startDate)) throw new IllegalArgumentException("Field endDate should be after startDate");
+        Optional.of(productId)
+                .filter(id -> id > 0)
+                .orElseThrow(() -> new IllegalArgumentException("Field productId should be greater than 0"));
+
+        Optional.of(brandId)
+                .filter(id -> id > 0)
+                .orElseThrow(() -> new IllegalArgumentException("Field brandId should be greater than 0"));
+
+        Optional.of(endDate)
+                .filter(ed -> !ed.isBefore(startDate))
+                .orElseThrow(() -> new IllegalArgumentException("Field endDate should be after startDate"));
     }
 }

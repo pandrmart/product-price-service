@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handler para IllegalArgumentException lanzadas por el service cuando se invoca de forma interna.
+     * Handler for IllegalArgumentException thrown by the service when invoked internally.
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public ProblemDetail handleIllegalArgument(IllegalArgumentException ex) {
