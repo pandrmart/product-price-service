@@ -6,6 +6,8 @@ import com.example.productprice.domain.port.out.GetProductPricePort;
 import com.example.productprice.domain.vo.Price;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,9 +31,9 @@ public class GetProductPriceServiceTest {
     @InjectMocks
     private GetProductPriceService getPriceService;
 
-    private final Long productId = 100L;
-    private final Long brandId = 2L;
-    private final LocalDateTime applicationDate = LocalDateTime.now();
+    private static final Long VALID_PRODUCT_ID = 100L;
+    private static final Long VALID_BRAND_ID = 2L;
+    private static final LocalDateTime VALID_DATE = LocalDateTime.now();
 
     @Test
     void getProductPrice_ShouldReturnProductPrice_WhenPortFindsIt() {
@@ -38,70 +41,53 @@ public class GetProductPriceServiceTest {
         Price price = new Price(new BigDecimal("12.34"), "EUR");
 
         ProductPrice expectedProductPrice = new ProductPrice(
-                productId, brandId, 1L,
+                VALID_PRODUCT_ID, VALID_BRAND_ID, 1L,
                 LocalDateTime.now().minusDays(1),
                 LocalDateTime.now().plusDays(1),
                 1L, price
         );
 
-        when(getProductPricePort.getProductPrice(productId, brandId, applicationDate))
+        when(getProductPricePort.getProductPrice(VALID_PRODUCT_ID, VALID_BRAND_ID, VALID_DATE))
                 .thenReturn(Optional.of(expectedProductPrice));
 
-        ProductPrice actualPrice = getPriceService.getProductPrice(productId, brandId, applicationDate);
+        ProductPrice actualPrice = getPriceService.getProductPrice(VALID_PRODUCT_ID, VALID_BRAND_ID, VALID_DATE);
 
         assertEquals(expectedProductPrice, actualPrice);
 
-        verify(getProductPricePort).getProductPrice(productId, brandId, applicationDate);
+        verify(getProductPricePort).getProductPrice(VALID_PRODUCT_ID, VALID_BRAND_ID, VALID_DATE);
     }
 
     @Test
     void getProductPrice_ShouldThrowProductPriceNotFoundException_WhenPortReturnsEmptyOptional() {
 
-        when(getProductPricePort.getProductPrice(productId, brandId, applicationDate))
+        when(getProductPricePort.getProductPrice(VALID_PRODUCT_ID, VALID_BRAND_ID, VALID_DATE))
                 .thenReturn(Optional.empty());
 
         assertThrows(ProductPriceNotFoundException.class,
-                () -> getPriceService.getProductPrice(productId, brandId, applicationDate)
+                () -> getPriceService.getProductPrice(VALID_PRODUCT_ID, VALID_BRAND_ID, VALID_DATE)
         );
 
-        verify(getProductPricePort).getProductPrice(productId, brandId, applicationDate);
+        verify(getProductPricePort).getProductPrice(VALID_PRODUCT_ID, VALID_BRAND_ID, VALID_DATE);
     }
 
-    @Test
-    void getProductPrice_ShouldThrowIllegalArgumentException_WhenProductIdIsNull() {
+    @ParameterizedTest(name = "{index} => productId={0}, brandId={1}, date={2}")
+    @MethodSource("invalidParameters")
+    void getProductPrice_ShouldThrowIllegalArgumentException_ForInvalidParameters(
+            Long productId, Long brandId, LocalDateTime applicationDate) {
         assertThrows(IllegalArgumentException.class,
-                () -> getPriceService.getProductPrice(null, brandId, applicationDate));
+                () -> getPriceService.getProductPrice(productId, brandId, applicationDate));
     }
 
-    @Test
-    void getProductPrice_ShouldThrowIllegalArgumentException_WhenProductIdIsZeroOrNegative() {
-
-        assertThrows(IllegalArgumentException.class,
-                () -> getPriceService.getProductPrice(0L, brandId, applicationDate));
-
-        assertThrows(IllegalArgumentException.class,
-                () -> getPriceService.getProductPrice(-10L, brandId, applicationDate));
-    }
-
-    @Test
-    void getProductPrice_ShouldThrowIllegalArgumentException_WhenBrandIdIsNull() {
-        assertThrows(IllegalArgumentException.class,
-                () -> getPriceService.getProductPrice(productId, null, applicationDate));
-    }
-
-    @Test
-    void getProductPrice_ShouldThrowIllegalArgumentException_WhenBrandIdIsZeroOrNegative() {
-
-        assertThrows(IllegalArgumentException.class,
-                () -> getPriceService.getProductPrice(productId, 0L, applicationDate));
-
-        assertThrows(IllegalArgumentException.class,
-                () -> getPriceService.getProductPrice(productId, -5L, applicationDate));
-    }
-
-    @Test
-    void getProductPrice_ShouldThrowIllegalArgumentException_WhenApplicationDateIsNull() {
-        assertThrows(IllegalArgumentException.class,
-                () -> getPriceService.getProductPrice(productId, brandId, null));
+    private static Stream<Object[]> invalidParameters() {
+        LocalDateTime now = LocalDateTime.now();
+        return Stream.of(
+                new Object[]{null, VALID_BRAND_ID, now},
+                new Object[]{0L, VALID_BRAND_ID, now},
+                new Object[]{-1L, VALID_BRAND_ID, now},
+                new Object[]{VALID_PRODUCT_ID, null, now},
+                new Object[]{VALID_PRODUCT_ID, 0L, now},
+                new Object[]{VALID_PRODUCT_ID, -5L, now},
+                new Object[]{VALID_PRODUCT_ID, VALID_BRAND_ID, null}
+        );
     }
 }

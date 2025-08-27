@@ -76,4 +76,14 @@ public class ProductPriceEntityTest {
         assertNotEquals(entity1, entity2);
         assertNotEquals(entity1.hashCode(), entity2.hashCode());
     }
+
+    @Test
+    void productPriceEntity_equals_shouldReturnFalse_whenComparingWithNullOrDifferentClass() {
+
+        ProductPriceEntity entity = new ProductPriceEntity();
+        entity.setId(1L);
+
+        assertNotEquals(null, entity);
+        assertNotEquals(new Object(), entity);
+    }
 }

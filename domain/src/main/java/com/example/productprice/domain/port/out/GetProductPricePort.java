@@ -20,7 +20,7 @@ public interface GetProductPricePort {
      * @param brandId         The unique identifier of the brand.
      * @param applicationDate The date and time for which the price is requested.
      * @return An {@link Optional} containing the found {@link ProductPrice},
-     *         or empty if no matching price is found.
+     * or empty if no matching price is found.
      */
     Optional<ProductPrice> getProductPrice(Long productId, Long brandId, LocalDateTime applicationDate);
 }

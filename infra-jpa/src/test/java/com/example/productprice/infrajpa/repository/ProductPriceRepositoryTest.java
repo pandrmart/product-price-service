@@ -85,4 +85,13 @@ public class ProductPriceRepositoryTest {
 
         assertTrue(foundPrices.isEmpty());
     }
+
+    @Test
+    void findProductPrice_shouldReturnEmptyList_whenDateOutOfRange() {
+
+        LocalDateTime outOfRangeDate = LocalDateTime.of(2025, 9, 1, 0, 0);
+        List<ProductPriceEntity> foundPrices = productPriceRepository.findPrice(productId, brandId, outOfRangeDate);
+
+        assertTrue(foundPrices.isEmpty());
+    }
 }

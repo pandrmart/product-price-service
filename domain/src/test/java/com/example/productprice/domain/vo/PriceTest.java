@@ -24,6 +24,15 @@ public class PriceTest {
     }
 
     @Test
+    void priceRecord_shouldAllowZeroAmount() {
+
+        Price price = new Price(BigDecimal.ZERO, "USD");
+
+        assertNotNull(price);
+        assertEquals(BigDecimal.ZERO, price.amount());
+    }
+
+    @Test
     void priceRecord_shouldThrowException_whenAmountIsNull() {
 
         BigDecimal invalidAmount = null;

@@ -53,4 +53,31 @@ public class ProductPriceMapperTest {
 
         assertThrows(NullPointerException.class, () -> mapper.toDomain(entity));
     }
+
+    @Test
+    void toDomain_shouldMapCorrectly_withMinimalEntity() {
+
+        ProductPriceEntity entity = new ProductPriceEntity();
+        entity.setProductId(100L);
+        entity.setBrandId(1L);
+        entity.setPriceList(1L);
+        entity.setStartDate(LocalDateTime.of(2025, 8, 20, 10, 0));
+        entity.setEndDate(LocalDateTime.of(2025, 8, 21, 10, 0));
+        entity.setPriority(1L);
+        entity.setPrice(new BigDecimal("10.00"));
+        entity.setCurrency("USD");
+
+        ProductPrice domain = mapper.toDomain(entity);
+
+        assertNotNull(domain);
+        assertEquals(entity.getProductId(), domain.productId());
+        assertEquals(entity.getBrandId(), domain.brandId());
+        assertEquals(entity.getPriceList(), domain.priceList());
+        assertEquals(entity.getStartDate(), domain.startDate());
+        assertEquals(entity.getEndDate(), domain.endDate());
+        assertEquals(entity.getPriority(), domain.priority());
+        assertNotNull(domain.price());
+        assertEquals(entity.getPrice(), domain.price().amount());
+        assertEquals(entity.getCurrency(), domain.price().currency());
+    }
 }

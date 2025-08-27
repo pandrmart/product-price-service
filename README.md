@@ -26,7 +26,7 @@ La solución está estructurada como un proyecto multi-módulo Maven, donde cada
 arquitectura hexagonal.
 
 > **Nota:** Este proyecto sigue un enfoque **API-first**: la API se define primero mediante OpenAPI (`openapi.yaml`) y
-se utiliza para generar interfaces, DTOs y controladores.
+> se utiliza para generar interfaces, DTOs y controladores.
 
 * **`parent`**: Módulo raíz que centraliza la gestión de dependencias (`<dependencyManagement>`) y la configuración
   global para todos los submódulos. Define la versión de Spring Boot (BOM) y otras dependencias comunes, evitando
@@ -146,7 +146,7 @@ Este proyecto usa una base de datos **H2 en memoria** para simplificar la ejecuc
   cada arranque.
 
 > Nota: Si deseas simular un entorno más cercano a producción, se podría reemplazar `ddl-auto=create` por un script SQL
-explícito (`schema.sql`).
+> explícito (`schema.sql`).
 
 ## 📌 Endpoints de la API
 
@@ -155,7 +155,7 @@ explícito (`schema.sql`).
 Retorna el precio aplicable para un producto y marca en una fecha y hora determinadas.
 
 > **Nota:** Se ha optado por usar `product-price` en singular en la URL, en lugar de seguir estrictamente la convención
-RESTful de recursos plurales, porque este endpoint devuelve **exactamente un precio** y no una colección de precios.
+> RESTful de recursos plurales, porque este endpoint devuelve **exactamente un precio** y no una colección de precios.
 
 * **Método**: `GET`
 
