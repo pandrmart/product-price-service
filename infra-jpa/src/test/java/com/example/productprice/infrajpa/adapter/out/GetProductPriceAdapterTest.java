@@ -71,7 +71,8 @@ public class GetProductPriceAdapterTest {
         when(mapper.toDomain(testProductPriceEntity))
                 .thenReturn(testProductPriceDomain);
 
-        Optional<ProductPrice> result = getProductPriceAdapter.getProductPrice(testProductId, testBrandId, testApplicationDate);
+        Optional<ProductPrice> result = getProductPriceAdapter.getProductPrice(
+                testProductId, testBrandId, testApplicationDate);
 
         assertTrue(result.isPresent());
         assertEquals(testProductPriceDomain, result.get());
@@ -86,7 +87,8 @@ public class GetProductPriceAdapterTest {
         when(productPriceRepository.findPrice(testProductId, testBrandId, testApplicationDate))
                 .thenReturn(Collections.emptyList());
 
-        Optional<ProductPrice> result = getProductPriceAdapter.getProductPrice(testProductId, testBrandId, testApplicationDate);
+        Optional<ProductPrice> result = getProductPriceAdapter.getProductPrice(
+                testProductId, testBrandId, testApplicationDate);
 
         assertTrue(result.isEmpty());
 

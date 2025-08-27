@@ -22,7 +22,8 @@ public class ProductPriceTest {
 
         Price price = new Price(new BigDecimal("12.34"), "EUR");
 
-        ProductPrice productPrice = new ProductPrice(productId, brandId, priceList, startDate, endDate, priority, price);
+        ProductPrice productPrice = new ProductPrice(
+                productId, brandId, priceList, startDate, endDate, priority, price);
 
         assertNotNull(productPrice);
         assertEquals(productId, productPrice.productId());

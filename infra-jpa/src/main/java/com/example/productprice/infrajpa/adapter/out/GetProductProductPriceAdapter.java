@@ -29,7 +29,8 @@ public class GetProductProductPriceAdapter implements GetProductPricePort {
 
     @Override
     public Optional<ProductPrice> getProductPrice(Long productId, Long brandId, LocalDateTime applicationDate) {
-        log.debug("Searching in database with productId={}, brandId={}, applicationDate={}", productId, brandId, applicationDate);
+        log.debug("Searching in database with productId={}, brandId={}, applicationDate={}",
+                productId, brandId, applicationDate);
         try {
             return productPriceRepository.findPrice(productId, brandId, applicationDate)
                     .stream()

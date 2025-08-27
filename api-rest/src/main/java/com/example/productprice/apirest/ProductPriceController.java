@@ -27,7 +27,8 @@ public class ProductPriceController implements ProductPriceApi {
     private final GetProductPriceUseCase getProductPriceUseCase;
     private final ProductPriceRestMapper mapper;
 
-    public ProductPriceController(GetProductPriceUseCase getProductPriceUseCase, ProductPriceRestMapper productPriceRestMapper) {
+    public ProductPriceController(
+            GetProductPriceUseCase getProductPriceUseCase, ProductPriceRestMapper productPriceRestMapper) {
         this.getProductPriceUseCase = getProductPriceUseCase;
         this.mapper = productPriceRestMapper;
     }
@@ -37,17 +38,19 @@ public class ProductPriceController implements ProductPriceApi {
      * This method applies business rules to find the correct price for a product
      * at a specific brand and application date.
      *
-     * @param productId         The unique identifier of the product.
-     * @param brandId           The unique identifier of the brand.
-     * @param applicationDate   The date and time of the application.
+     * @param productId       The unique identifier of the product.
+     * @param brandId         The unique identifier of the brand.
+     * @param applicationDate The date and time of the application.
      * @return The found ProductPrice matching the criteria.
      */
     @Override
-    public ResponseEntity<ProductPriceResponse> getProductPrice(@RequestParam Long productId,
-                                                                @RequestParam Long brandId,
-                                                                @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applicationDate) {
+    public ResponseEntity<ProductPriceResponse> getProductPrice(
+            @RequestParam Long productId,
+            @RequestParam Long brandId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime applicationDate) {
 
-        log.info("Request received with productId: {}, brandId: {}, applicationDate: {}", productId, brandId, applicationDate);
+        log.info("Request received with productId: {}, brandId: {}, applicationDate: {}",
+                productId, brandId, applicationDate);
 
         ProductPrice productPrice = getProductPriceUseCase.getProductPrice(productId, brandId, applicationDate);
         log.info("Product price found and will be returned");
