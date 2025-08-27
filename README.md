@@ -1,10 +1,13 @@
 # API REST de Precios de Productos
 
-API diseñada para consultar el precio de un producto en una fecha y hora específicas, aplicando un conjunto de reglas de negocio.
+API diseñada para consultar el precio de un producto en una fecha y hora específicas, aplicando un conjunto de reglas de
+negocio.
 
 ## 💡 Visión General del Proyecto
 
-Este proyecto implementa una API REST para gestionar precios de productos, siguiendo los principios de **Arquitectura Hexagonal (Puertos y Adaptadores)** y **Domain-Driven Design (DDD)**. Esta elección arquitectónica promueve una **clara separación de preocupaciones**, **bajo acoplamiento** y facilita la **mantenibilidad, testeo y escalabilidad**.
+Este proyecto implementa una API REST para gestionar precios de productos, siguiendo los principios de **Arquitectura
+Hexagonal (Puertos y Adaptadores)** y **Domain-Driven Design (DDD)**. Esta elección arquitectónica promueve una **clara
+separación de preocupaciones**, **bajo acoplamiento** y facilita la **mantenibilidad, testeo y escalabilidad**.
 
 ## 🛠️ Built With
 
@@ -19,48 +22,65 @@ Este proyecto implementa una API REST para gestionar precios de productos, sigui
 
 ## 🏗️ Arquitectura y Módulos
 
-La solución está estructurada como un proyecto multi-módulo Maven, donde cada módulo representa una capa de la arquitectura hexagonal.
+La solución está estructurada como un proyecto multi-módulo Maven, donde cada módulo representa una capa de la
+arquitectura hexagonal.
 
-> **Nota:** Este proyecto sigue un enfoque **API-first**: la API se define primero mediante OpenAPI (`openapi.yaml`) y se utiliza para generar interfaces, DTOs y controladores.
+> **Nota:** Este proyecto sigue un enfoque **API-first**: la API se define primero mediante OpenAPI (`openapi.yaml`) y
+se utiliza para generar interfaces, DTOs y controladores.
 
-* **`parent`**: Módulo raíz que centraliza la gestión de dependencias (`<dependencyManagement>`) y la configuración global para todos los submódulos. Define la versión de Spring Boot (BOM) y otras dependencias comunes, evitando duplicidad de versiones en los hijos.
+* **`parent`**: Módulo raíz que centraliza la gestión de dependencias (`<dependencyManagement>`) y la configuración
+  global para todos los submódulos. Define la versión de Spring Boot (BOM) y otras dependencias comunes, evitando
+  duplicidad de versiones en los hijos.
 
 * **`domain`**:
 
-    * **Propósito**: El **núcleo de la aplicación**. Contiene las **entidades de negocio**, los **Value Objects** y las **interfaces de los puertos** (tanto de entrada como de salida) que definen el contrato con las capas externas.
+    * **Propósito**: El **núcleo de la aplicación**. Contiene las **entidades de negocio**, los **Value Objects** y las
+      **interfaces de los puertos** (tanto de entrada como de salida) que definen el contrato con las capas externas.
 
     * **Dependencias**: **No depende de ningún otro módulo** del proyecto.
 
 * **`application`**:
 
-    * **Propósito**: Implementa los **casos de uso (Use Cases)** de la aplicación. Contiene la lógica de negocio principal y orquesta el flujo de datos entre el dominio y los puertos. Lanza la excepción de dominio ProductPriceNotFoundException cuando no existe un precio aplicable y valida los parámetros internos mediante IllegalArgumentException.
+    * **Propósito**: Implementa los **casos de uso (Use Cases)** de la aplicación. Contiene la lógica de negocio
+      principal y orquesta el flujo de datos entre el dominio y los puertos. Lanza la excepción de dominio
+      ProductPriceNotFoundException cuando no existe un precio aplicable y valida los parámetros internos mediante
+      IllegalArgumentException.
 
     * **Dependencias**: Depende del módulo `domain`.
 
 * **`apirest`**:
 
     * **Propósito**: Actúa como **adaptador de entrada REST** dentro de la arquitectura hexagonal.  
-      Contiene los **controladores REST**, los **DTOs** (Data Transfer Objects) y la **definición OpenAPI** (`openapi.yaml`).  
-      Se encarga de la validación de la entrada HTTP, de traducir las peticiones web a llamadas a los casos de uso y de exponer la API como contrato.
+      Contiene los **controladores REST**, los **DTOs** (Data Transfer Objects) y la **definición OpenAPI** (
+      `openapi.yaml`).  
+      Se encarga de la validación de la entrada HTTP, de traducir las peticiones web a llamadas a los casos de uso y de
+      exponer la API como contrato.
       Traduce excepciones y errores a respuestas HTTP coherentes mediante un GlobalExceptionHandler.
 
     * **Dependencias**: Depende del módulo `application`.
 
-    * **Nota**: El **contrato OpenAPI** podría extraerse a un módulo independiente `api-contract`, lo que permitiría publicarlo y versionarlo de forma aislada.
+    * **Nota**: El **contrato OpenAPI** podría extraerse a un módulo independiente `api-contract`, lo que permitiría
+      publicarlo y versionarlo de forma aislada.
 
 * **`infra-jpa`**:
 
-    * **Propósito**: Actúa como **adaptador de salida**. Contiene la lógica para interactuar con la base de datos usando **Spring Data JPA/Hibernate**.  
-      Implementa los **puertos de salida del dominio** y se encarga de mapear entidades y repositorios. Originalmente se utilizó la convención de nombres de Spring Data JPA para generar queries automáticamente, pero resultó en un método demasiado largo, así que por elegancia se optó por JPQL.
+    * **Propósito**: Actúa como **adaptador de salida**. Contiene la lógica para interactuar con la base de datos usando
+      **Spring Data JPA/Hibernate**.  
+      Implementa los **puertos de salida del dominio** y se encarga de mapear entidades y repositorios. Originalmente se
+      utilizó la convención de nombres de Spring Data JPA para generar queries automáticamente, pero resultó en un
+      método demasiado largo, así que por elegancia se optó por JPQL.
 
-      * **Dependencias**: Depende del módulo `domain` y de las librerías de persistencia (Spring Boot Starter JPA, H2 para tests).
+        * **Dependencias**: Depende del módulo `domain` y de las librerías de persistencia (Spring Boot Starter JPA, H2
+          para tests).
 
 * **`boot`**:
 
     * **Propósito**: Este es el módulo que **inicia la aplicación Spring Boot**.  
-      Contiene la clase `main`, la configuración principal (`application.properties`), los recursos como `data.sql` para la carga inicial de la base de datos H2 y los **tests de integración End-to-End (E2E) con Karate**.
+      Contiene la clase `main`, la configuración principal (`application.properties`), los recursos como `data.sql` para
+      la carga inicial de la base de datos H2 y los **tests de integración End-to-End (E2E) con Karate**.
 
-    * **Dependencias**: Depende de los módulos `apirest`, `application` e `infra-jpa` para arrancar y probar la aplicación completa.  
+    * **Dependencias**: Depende de los módulos `apirest`, `application` e `infra-jpa` para arrancar y probar la
+      aplicación completa.  
       Además, dispone del plugin `spring-boot-maven-plugin` para empaquetar y ejecutar la aplicación como un `fat jar`.
 
 ## ⚙️ Tecnologías Utilizadas
@@ -87,41 +107,46 @@ La solución está estructurada como un proyecto multi-módulo Maven, donde cada
 
 Asegúrate de tener **Maven** y **Java 21** instalados en tu sistema.
 
-1.  **Clona el repositorio**:
-    ```bash
-    git clone https://github.com/pandrmart/product-price-service.git
-    cd product-price-service
-    ```
+1. **Clona el repositorio**:
+   ```bash
+   git clone https://github.com/pandrmart/product-price-service.git
+   cd product-price-service
+   ```
 
-2.  **Configura JAVA_HOME**:
-    Asegúrate de que la variable de entorno **`JAVA_HOME`** apunte a tu instalación de **Java 21** para evitar problemas de compilación.
+2. **Configura JAVA_HOME**:
+   Asegúrate de que la variable de entorno **`JAVA_HOME`** apunte a tu instalación de **Java 21** para evitar problemas
+   de compilación.
 
-3.  **Compila y empaqueta el proyecto**:  
-    **Nota:** Este proyecto utiliza OpenAPI Generator para crear las interfaces de la API y DTOs. Puedes generar las fuentes con:
-    ```bash
-    mvn clean generate-sources
-    ```
-    Desde el directorio raíz del proyecto (donde se encuentra el `pom.xml` padre), ejecuta:
-    ```bash
-    mvn clean install
-    ```
+3. **Compila y empaqueta el proyecto**:  
+   **Nota:** Este proyecto utiliza OpenAPI Generator para crear las interfaces de la API y DTOs. Puedes generar las
+   fuentes con:
+   ```bash
+   mvn clean generate-sources
+   ```
+   Desde el directorio raíz del proyecto (donde se encuentra el `pom.xml` padre), ejecuta:
+   ```bash
+   mvn clean install
+   ```
 
-4.  **Ejecuta la aplicación**:
-    Una vez compilado, puedes ejecutar la aplicación Spring Boot desde el módulo `boot`:
-    ```bash
-    java -jar boot/target/boot-0.0.1-SNAPSHOT.jar
-    ```
-    La aplicación se iniciará en `http://localhost:8080`.
+4. **Ejecuta la aplicación**:
+   Una vez compilado, puedes ejecutar la aplicación Spring Boot desde el módulo `boot`:
+   ```bash
+   java -jar boot/target/boot-0.0.1-SNAPSHOT.jar
+   ```
+   La aplicación se iniciará en `http://localhost:8080`.
 
 ## 🛢️️Base de Datos para la Prueba de Código
 
 Este proyecto usa una base de datos **H2 en memoria** para simplificar la ejecución de la prueba de código.
 
-* Spring Boot está configurado con `spring.jpa.hibernate.ddl-auto=create`, lo que significa que las tablas se crean automáticamente a partir de las entidades al iniciar la aplicación.
+* Spring Boot está configurado con `spring.jpa.hibernate.ddl-auto=create`, lo que significa que las tablas se crean
+  automáticamente a partir de las entidades al iniciar la aplicación.
 * Se ejecuta el archivo `data.sql` en `src/main/resources` para precargar datos de prueba.
-* Esta configuración es **solo para pruebas y demos**, no debe usarse en producción, ya que recrea la base de datos en cada arranque.
+* Esta configuración es **solo para pruebas y demos**, no debe usarse en producción, ya que recrea la base de datos en
+  cada arranque.
 
-> Nota: Si deseas simular un entorno más cercano a producción, se podría reemplazar `ddl-auto=create` por un script SQL explícito (`schema.sql`).
+> Nota: Si deseas simular un entorno más cercano a producción, se podría reemplazar `ddl-auto=create` por un script SQL
+explícito (`schema.sql`).
 
 ## 📌 Endpoints de la API
 
@@ -129,7 +154,8 @@ Este proyecto usa una base de datos **H2 en memoria** para simplificar la ejecuc
 
 Retorna el precio aplicable para un producto y marca en una fecha y hora determinadas.
 
-> **Nota:** Se ha optado por usar `product-price` en singular en la URL, en lugar de seguir estrictamente la convención RESTful de recursos plurales, porque este endpoint devuelve **exactamente un precio** y no una colección de precios.
+> **Nota:** Se ha optado por usar `product-price` en singular en la URL, en lugar de seguir estrictamente la convención
+RESTful de recursos plurales, porque este endpoint devuelve **exactamente un precio** y no una colección de precios.
 
 * **Método**: `GET`
 
@@ -141,7 +167,8 @@ Retorna el precio aplicable para un producto y marca en una fecha y hora determi
 
     * `brandId`: ID de la marca (tipo `Long`). **Requerido y debe ser > 0**.
 
-    * `applicationDate`: Fecha y hora para la cual se busca el precio (formato `yyyy-MM-dd'T'HH:mm:ss`). **Requerido y no puede ser una fecha futura**.
+    * `applicationDate`: Fecha y hora para la cual se busca el precio (formato `yyyy-MM-dd'T'HH:mm:ss`). **Requerido y
+      no puede ser una fecha futura**.
 
 * **Ejemplo de Petición**:
 
@@ -165,13 +192,17 @@ Retorna el precio aplicable para un producto y marca en una fecha y hora determi
 
 ## 🚦 Gestión de Errores
 
-La API utiliza un **`GlobalExceptionHandler`** para proporcionar respuestas de error consistentes y seguras. Esto evita la exposición de información sensible como las trazas de error.
+La API utiliza un **`GlobalExceptionHandler`** para proporcionar respuestas de error consistentes y seguras. Esto evita
+la exposición de información sensible como las trazas de error.
 
-* **`400 Bad Request`**: Se devuelve para **errores de validación de la API** (parámetros nulos, formato incorrecto, `productId`/`brandId` no válidos) gestionados por el controlador.
+* **`400 Bad Request`**: Se devuelve para **errores de validación de la API** (parámetros nulos, formato incorrecto,
+  `productId`/`brandId` no válidos) gestionados por el controlador.
 
-* **`404 Not Found`**: Se devuelve cuando la lógica de negocio (en el servicio) determina que **no se ha encontrado un precio** aplicable para los criterios proporcionados (`ProductPriceNotFoundException`).
+* **`404 Not Found`**: Se devuelve cuando la lógica de negocio (en el servicio) determina que **no se ha encontrado un
+  precio** aplicable para los criterios proporcionados (`ProductPriceNotFoundException`).
 
-* **`500 Internal Server Error`**: Se devuelve para **errores inesperados** o fallos técnicos internos del servidor (ej. problemas de conexión a la base de datos).
+* **`500 Internal Server Error`**: Se devuelve para **errores inesperados** o fallos técnicos internos del servidor (ej.
+  problemas de conexión a la base de datos).
 
 ## 🧪 Testing
 
@@ -179,14 +210,23 @@ El proyecto cuenta con una sólida estrategia de testing, incluyendo:
 
 * **Tests Unitarios**: Utilizando **JUnit 5 y Mockito** para verificar la lógica de negocio de los diferentes módulos.
 
-* **Tests de Repositorio**: Se utilizan tests de Spring Boot específicos para la capa de persistencia (`@DataJpaTest`) para validar el comportamiento del `ProductPriceRepository`.
+* **Tests de Repositorio**: Se utilizan tests de Spring Boot específicos para la capa de persistencia (`@DataJpaTest`)
+  para validar el comportamiento del `ProductPriceRepository`.
 
-* **Tests de Integración**: Empleando **Karate** para asegurar que el API REST funciona correctamente de extremo a extremo, verificando los códigos de estado HTTP y los cuerpos de respuesta para escenarios exitosos y de error. Los cinco primeros casos de prueba del endpoint podrían compactarse usando un Scenario Outline. Estos tests se encuentran en el módulo **`boot`**.
-    * **Ejecución**: Los tests de Karate se ejecutan automáticamente como parte del ciclo de vida de Maven (`test` o `verify`). Puedes ejecutarlos desde la raíz del proyecto o desde el módulo `boot` con `mvn clean verify` o `mvn test`. Alternativamente, puedes **ejecutar directamente `TestRunner` desde tu IDE** como una prueba JUnit normal.
+* **Tests de Integración**: Empleando **Karate** para asegurar que el API REST funciona correctamente de extremo a
+  extremo, verificando los códigos de estado HTTP y los cuerpos de respuesta para escenarios exitosos y de error. Los
+  cinco primeros casos de prueba del endpoint podrían compactarse usando un Scenario Outline. Estos tests se encuentran
+  en el módulo **`boot`**.
+    * **Ejecución**: Los tests de Karate se ejecutan automáticamente como parte del ciclo de vida de Maven (`test` o
+      `verify`). Puedes ejecutarlos desde la raíz del proyecto o desde el módulo `boot` con `mvn clean verify` o
+      `mvn test`. Alternativamente, puedes **ejecutar directamente `TestRunner` desde tu IDE** como una prueba JUnit
+      normal.
 
 ## 📝 Documentación y Logging
 
-* **Javadoc**: Se utiliza extensivamente en interfaces (puertos) y clases públicas para documentar el propósito, parámetros, retornos y excepciones de los métodos, facilitando la comprensión y el mantenimiento del código. En las implementaciones se utiliza `@inheritDoc` para heredar la documentación.
+* **Javadoc**: Se utiliza extensivamente en interfaces (puertos) y clases públicas para documentar el propósito,
+  parámetros, retornos y excepciones de los métodos, facilitando la comprensión y el mantenimiento del código. En las
+  implementaciones se utiliza `@inheritDoc` para heredar la documentación.
 
 * **Logging**: Implementado con **SLF4J y Logback**, con una estrategia de logging por capa:
 
@@ -194,6 +234,8 @@ El proyecto cuenta con una sólida estrategia de testing, incluyendo:
 
     * **`INFO`**: Para eventos importantes de inicio/fin de operaciones de negocio.
 
-    * **`WARN`**: Para errores de cliente (`400`, `404`) en el `GlobalExceptionHandler`, indicando uso incorrecto de la API.
+    * **`WARN`**: Para errores de cliente (`400`, `404`) en el `GlobalExceptionHandler`, indicando uso incorrecto de la
+      API.
 
-    * **`ERROR`**: Para fallos críticos del sistema (`500`) en el `GlobalExceptionHandler` y errores técnicos en la capa `infrastructure` (adaptadores), registrando la traza de error completa para depuración interna.
+    * **`ERROR`**: Para fallos críticos del sistema (`500`) en el `GlobalExceptionHandler` y errores técnicos en la capa
+      `infrastructure` (adaptadores), registrando la traza de error completa para depuración interna.
