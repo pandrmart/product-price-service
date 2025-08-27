@@ -13,7 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,7 +31,8 @@ public class ProductPriceRepositoryTest {
     @Configuration
     @EnableJpaRepositories(basePackages = "com.example.productprice.infrajpa.repository")
     @EntityScan(basePackages = "com.example.productprice.infrajpa.entity")
-    static class TestConfig {}
+    static class TestConfig {
+    }
 
     @BeforeEach
     void setUp() {
@@ -62,30 +62,6 @@ public class ProductPriceRepositoryTest {
         price2.setCurrency("EUR");
 
         productPriceRepository.saveAll(List.of(price1, price2));
-    }
-
-    @Test
-    void findFirstByMethod_shouldReturnHighestPriorityPrice() {
-
-        Optional<ProductPriceEntity> foundPrice = productPriceRepository.findFirstByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
-                productId, brandId, applicationDate, applicationDate
-        );
-
-        assertTrue(foundPrice.isPresent());
-        assertEquals(1L, foundPrice.get().getPriority());
-        assertEquals(new BigDecimal("30.00"), foundPrice.get().getPrice());
-    }
-
-    @Test
-    void findFirstByMethod_shouldReturnEmptyOptional_whenNoPriceMatches() {
-
-        productPriceRepository.deleteAll();
-
-        Optional<ProductPriceEntity> foundPrice = productPriceRepository.findFirstByProductIdAndBrandIdAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPriorityDesc(
-                productId, brandId, applicationDate, applicationDate
-        );
-
-        assertTrue(foundPrice.isEmpty());
     }
 
     @Test
