@@ -216,10 +216,13 @@ El proyecto cuenta con una sólida estrategia de testing, incluyendo:
   extremo, verificando los códigos de estado HTTP y los cuerpos de respuesta para escenarios exitosos y de error.
   Como puntualización, los cinco primeros casos de prueba del endpoint podrían compactarse usando un Scenario Outline.
   Estos tests se encuentran en el módulo **`boot`**.
-    * **Ejecución**: Los tests de Karate se ejecutan automáticamente como parte del ciclo de vida de Maven (`test` o
-      `verify`). Puedes ejecutarlos desde la raíz del proyecto o desde el módulo `boot` con `mvn clean verify` o
-      `mvn test`. Alternativamente, puedes **ejecutar directamente `TestRunner` desde tu IDE** como una prueba JUnit
-      normal.
+    * **Ejecución**: Puedes ejecutarlos desde la raíz del proyecto o desde el módulo `boot` con `mvn test` o
+      `mvn clean verify`. Alternativamente, puedes **ejecutar directamente `TestRunner` desde tu IDE** como una prueba
+      JUnit normal.
+
+> **Nota:** Todos los tests del proyecto se ejecutan automáticamente como parte del ciclo de vida de Maven (`test` o
+> `verify`). También puedes ejecutarlos manualmente desde la raíz del proyecto con los comandos `mvn test` o
+> `mvn clean verify`
 
 ## 📝 Documentación y Logging
 
