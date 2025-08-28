@@ -118,8 +118,8 @@ Asegúrate de tener **Maven** y **Java 21** instalados en tu sistema.
    de compilación.
 
 3. **Compila y empaqueta el proyecto**:  
-   **Nota:** Este proyecto utiliza OpenAPI Generator para crear las interfaces de la API y DTOs. Puedes generar las
-   fuentes con:
+   **Nota:** Este proyecto utiliza OpenAPI Generator para crear las interfaces de la API y DTOs. Las fuentes se generan
+   automáticamente durante el build. También puedes generarlas manualmente con:
    ```bash
    mvn clean generate-sources
    ```
